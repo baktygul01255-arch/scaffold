@@ -1,698 +1,654 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>SCAFFOLD PRO — Конструктор урока для учителя</title>
-<style>
-:root{--bg:#f4f7fb;--panel:#fff;--text:#172033;--muted:#667085;--line:#dfe5ef;--accent:#2c6e8f;--accent2:#7145a1;--ok:#16794f;--warn:#a15c00;--danger:#a13c3c;--chip:#eef3f8;--shadow:0 10px 28px rgba(30,50,80,.09);--radius:18px}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-button,input,select,textarea{font:inherit}button{cursor:pointer}.app{max-width:1500px;margin:auto;padding:14px}
-.topbar{position:sticky;top:0;z-index:20;background:rgba(244,247,251,.94);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);margin:-14px -14px 14px;padding:12px 14px}
-.toprow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.brand{font-weight:850;font-size:20px;letter-spacing:.2px;margin-right:auto}.brand small{display:block;font-size:12px;font-weight:600;color:var(--muted)}
-.btn{border:1px solid var(--line);background:#fff;color:var(--text);border-radius:12px;padding:9px 12px;font-weight:700}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important}.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.btn.ghost{background:transparent}.btn.danger{color:var(--danger)}
-.lang{display:flex;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff}.lang button{border:0;background:transparent;padding:9px 12px;font-weight:800}.lang button.active{background:var(--accent);color:#fff}
-.layout{display:grid;grid-template-columns:1.2fr .8fr;gap:16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;margin-bottom:14px}.card h2,.card h3{margin:0 0 10px}.hint{color:var(--muted);font-size:13px}.section-title{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}.badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;background:var(--chip);padding:5px 9px;font-weight:750;font-size:12px}.badge.ok{background:#e8f6ef;color:var(--ok)}
-.grid{display:grid;gap:10px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.field label{display:block;font-size:12px;color:var(--muted);font-weight:750;margin-bottom:5px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px 11px;color:var(--text);outline:none}.field textarea{min-height:82px;resize:vertical}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(44,110,143,.11)}
-.task-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.task-tile{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fbfcfe}.task-tile strong{display:block;margin-bottom:7px}.task-tile textarea,.task-tile input{width:100%;border:0;border-top:1px dashed var(--line);padding:8px 0 0;background:transparent;outline:0;min-height:44px}.task-help{margin-top:7px;padding:7px 8px;border-radius:9px;background:#f1f5f9;color:#536274;font-size:11.5px;line-height:1.35}
-.steps{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:10px 0 14px}.step{border:1px solid var(--line);background:#fff;border-radius:12px;padding:8px 6px;text-align:center;font-weight:800;font-size:12px}.step.active{background:var(--accent);border-color:var(--accent);color:#fff}.step.done{border-color:#9fd2ba;background:#effaf5;color:var(--ok)}
-.step-pane{display:none}.step-pane.active{display:block}.chooser{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.choice{border:1px solid var(--line);border-radius:14px;padding:11px;background:#fff;transition:.15s}.choice:hover{transform:translateY(-1px);box-shadow:0 7px 18px rgba(30,50,80,.08)}.choice.selected{border-color:var(--accent);background:#f0f8fb}.choice.featured{background:#edf2f7;border-color:#c7d4e2}.choice.featured .code{color:#244b66}.choice.featured .name{color:#173246}.choice.featured.selected{background:#dfe9f2;border-color:#5b7f98}.choice .code{font-weight:900;color:var(--accent);font-size:12px}.choice .name{font-weight:800}.choice .desc{font-size:12px;color:var(--muted);margin-top:4px}.category{border:1px solid var(--line);border-radius:15px;margin:10px 0;overflow:hidden}.category[data-kind="trans"] summary{background:#d8e4ef;color:#173246}.category summary{cursor:pointer;padding:11px 13px;font-weight:850;background:#e7edf4;color:#173246;border-bottom:1px solid #d2dce8}.category .inside{padding:10px}.search{width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:10px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.chip{border-radius:999px;padding:6px 9px;background:var(--chip);font-size:12px;font-weight:750}.chip.featured{background:#dfe9f2;color:#173246}.chip button{border:0;background:transparent;margin-left:5px;color:var(--danger)}
-.navrow{display:flex;justify-content:space-between;gap:10px;margin-top:14px}.timeline{display:grid;gap:10px}.tlrow{display:grid;grid-template-columns:52px 1fr 82px 90px;gap:8px;align-items:start;border:1px solid var(--line);border-radius:14px;padding:10px}.tlrow .min input{width:52px}.tlrow input,.tlrow textarea,.tlrow select{width:100%;border:1px solid var(--line);border-radius:10px;padding:8px}.support{height:8px;background:#e6ebf2;border-radius:999px;overflow:hidden;margin-top:6px}.support i{display:block;height:100%;background:var(--accent);border-radius:inherit}.tiny{font-size:11px;color:var(--muted)}
-.checklist{display:grid;gap:7px}.check{display:flex;gap:8px;align-items:flex-start;border:1px solid var(--line);border-radius:12px;padding:9px}.dot{width:18px;height:18px;border-radius:50%;display:inline-grid;place-items:center;background:#f1f4f8;color:var(--muted);font-size:11px;flex:0 0 auto}.check.ok .dot{background:#ddf4e8;color:var(--ok)}.check.warn .dot{background:#fff1dc;color:var(--warn)}
-.preview{position:sticky;top:86px;max-height:calc(100vh - 105px);overflow:auto}.plan{font-size:13px}.plan h3{font-size:16px;margin:14px 0 6px}.plan .line{border-bottom:1px dashed var(--line);padding:5px 0}.plan table{border-collapse:collapse;width:100%;font-size:12px}.plan th,.plan td{border:1px solid var(--line);padding:6px;text-align:left;vertical-align:top}.plan th{background:#f6f8fb}.empty{color:var(--muted);font-style:italic}
-.callout{border-left:4px solid var(--accent2);background:#f7f2fb;padding:10px 12px;border-radius:10px;margin:10px 0}.source-note{font-size:11px;color:var(--muted);margin-top:8px}.toast{position:fixed;right:18px;bottom:18px;background:#172033;color:#fff;padding:10px 14px;border-radius:12px;opacity:0;pointer-events:none;transition:.2s;z-index:99}.toast.show{opacity:1}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Тренажер: Тепловое равновесие</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- KaTeX for Math rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
 
-/* --- Smart assistant --- */
-.assistant-card{border:1px solid #b8ccdc;background:linear-gradient(180deg,#f7fbfe 0%,#fff 100%)}
-.assistant-head{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}
-.assistant-title{display:flex;gap:10px;align-items:center}.assistant-icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#dceaf4;font-size:21px}
-.assistant-badge{display:inline-flex;align-items:center;border-radius:999px;padding:5px 9px;background:#e7f4ec;color:#17633f;font-size:12px;font-weight:850}
-.assistant-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}
-.assistant-actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.btn.smart{background:#244f6b;color:white;border-color:#244f6b}.btn.smart-lite{background:#edf4f8;border-color:#c4d6e2;color:#244f6b}
-.assistant-result{display:grid;gap:10px;margin-top:12px}.assistant-empty{border:1px dashed #b8ccdc;border-radius:14px;padding:14px;color:var(--muted);background:#fbfdff}
-.assistant-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.assistant-block{border:1px solid #d8e3eb;border-radius:14px;padding:12px;background:#fff}.assistant-block.wide{grid-column:1/-1}.assistant-block h4{margin:0 0 8px;font-size:14px}.assistant-item{border-top:1px dashed #dce4ea;padding:7px 0}.assistant-item:first-of-type{border-top:0}.assistant-item .why{font-size:12px;color:var(--muted);margin-top:2px}.assistant-pills{display:flex;gap:6px;flex-wrap:wrap}.assistant-pill{border-radius:999px;padding:6px 9px;background:#e8f0f6;color:#214a64;font-size:12px;font-weight:800}.assistant-pill.cross{background:#dbe6ef;color:#17384c}.assistant-mini{font-size:12px;color:var(--muted)}
-.assistant-previewline{padding:5px 0}.assistant-timeline{width:100%;border-collapse:collapse;font-size:12px}.assistant-timeline th,.assistant-timeline td{border:1px solid #dfe5ef;padding:6px;vertical-align:top;text-align:left}.assistant-timeline th{background:#edf3f7}.assistant-stale{font-size:12px;color:#8b5a00;background:#fff7e6;border:1px solid #f0d69d;border-radius:10px;padding:7px 9px;margin-top:8px}
-@media(max-width:800px){.assistant-controls,.assistant-grid{grid-template-columns:1fr}.assistant-block.wide{grid-column:auto}}
-
-@media(max-width:1000px){.layout{grid-template-columns:1fr}.preview{position:static;max-height:none}.task-grid{grid-template-columns:repeat(2,1fr)}.steps{grid-template-columns:repeat(4,1fr)}}
-@media(max-width:620px){.app{padding:8px}.topbar{margin:-8px -8px 10px;padding:9px}.brand{font-size:17px}.g2,.g3,.chooser,.task-grid{grid-template-columns:1fr}.steps{grid-template-columns:repeat(2,1fr)}.tlrow{grid-template-columns:48px 1fr}.tlrow .supportbox,.tlrow .modebox{grid-column:2}.btn{padding:9px 10px}.card{padding:12px;border-radius:15px}}
-@media print{body{background:#fff}.topbar,.leftcol,.no-print{display:none!important}.layout{display:block}.rightcol{width:100%}.preview{position:static;max-height:none;border:0;box-shadow:none}.card{border:0;box-shadow:none;padding:0}.plan{font-size:11pt}.plan table{font-size:9.5pt}.source-note{display:none}}
-
-/* SCAFFOLD PRO additions */
-.modebar{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.modebtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 11px;font-weight:800;font-size:12px}.modebtn.active{background:#e1edf5;border-color:#7f9eb5;color:#16384e}
-.cross-box{background:#dce6ef;border:1px solid #bdcddd;border-radius:15px;padding:12px;margin:10px 0 12px}.cross-title{font-weight:900;color:#173246;margin-bottom:8px}.cross-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.cross-pill{border:1px solid #a9bccd;background:#edf3f8;color:#173246;border-radius:12px;padding:8px 10px;text-align:left;font-weight:800}.cross-pill.active{background:#8ea7bb;color:#fff;border-color:#718da3}.cross-pill small{display:block;font-weight:650;opacity:.82;margin-top:2px}
-.notice{border:1px solid #ecd29c;background:#fff8e7;color:#6d4a07;border-radius:12px;padding:9px 11px;margin:10px 0;font-size:12px}.notice.ok{border-color:#add7c1;background:#eef9f3;color:#17633f}.related-box{border:1px dashed #b9c9d8;background:#f7fafc;border-radius:14px;padding:10px;margin:12px 0}.related-title{font-weight:850;margin-bottom:7px}.related-list{display:flex;flex-wrap:wrap;gap:6px}.related-btn{border:1px solid #c8d5df;background:#fff;border-radius:999px;padding:7px 9px;font-weight:750;font-size:12px}.related-btn:hover{background:#edf4f8}.choice.dim{opacity:.38}.choice.match{box-shadow:0 0 0 2px rgba(44,110,143,.23)}
-.category[data-kind="digital"] summary{background:#f1d9c7}.category[data-kind="entre"] summary{background:#e5d4ef}.category[data-kind="sustain"] summary{background:#d8eadb}.category[data-kind="personal"] summary{background:#f5e8a9}.category[data-kind="digital"] .choice{background:#fff8f2}.category[data-kind="entre"] .choice{background:#fcf8ff}.category[data-kind="sustain"] .choice{background:#f6fcf7}.category[data-kind="personal"] .choice{background:#fffdf2}
-.category[data-kind="digital"] .choice.selected{background:#f7e0cf;border-color:#d9a77f}.category[data-kind="entre"] .choice.selected{background:#eadcf2;border-color:#b495c4}.category[data-kind="sustain"] .choice.selected{background:#deeee1;border-color:#99bda1}.category[data-kind="personal"] .choice.selected{background:#f7edbd;border-color:#d6c66a}
-.diag-list{display:grid;gap:10px}.diag-card{border:1px solid var(--line);border-radius:14px;padding:11px;background:#fbfcfe}.diag-head{display:flex;gap:8px;align-items:flex-start;margin-bottom:9px}.diag-head .codebox{min-width:42px;font-weight:900;color:var(--accent)}.diag-head .diag-name{font-weight:850}.diag-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.diag-card select,.diag-card textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:8px;background:#fff}.diag-card textarea{grid-column:1/-1;min-height:58px;resize:vertical}.method-help{margin-top:8px;border-top:1px dashed var(--line);padding-top:7px}.method-help summary{cursor:pointer;font-size:12px;font-weight:850;color:#355b75}.method-help ol{margin:7px 0 0 19px;padding:0;font-size:12px;color:var(--muted)}.method-help li{margin:4px 0}
-.quality-grid{display:grid;gap:7px}.quality-score{font-weight:900;background:#e9f2f7;color:#214b64;border-radius:999px;padding:6px 10px;white-space:nowrap}.quality-note{font-size:11px;color:var(--muted);margin-top:8px}.check .why{font-size:11px;color:var(--muted);margin-top:2px}.chip.cat-digital{background:#f4dfcf}.chip.cat-entre{background:#eadcf1}.chip.cat-sustain{background:#dfeedf}.chip.cat-personal{background:#f7edbd}.chip.cat-trans{background:#d8e4ef;color:#173246}
-@media(max-width:620px){.cross-nav,.diag-grid{grid-template-columns:1fr}.diag-card textarea{grid-column:auto}.modebar{gap:6px}.modebtn{width:100%;text-align:left}}
-
-
-/* --- Built-in bilingual quick guide --- */
-body.guide-open{overflow:hidden}
-.guide-overlay{position:fixed;inset:0;z-index:1000;background:rgba(19,32,51,.48);display:none;align-items:center;justify-content:center;padding:18px}
-.guide-overlay.open{display:flex}
-.guide-panel{width:min(980px,100%);height:min(92vh,920px);background:#fff;border:1px solid #d7e0ea;border-radius:20px;box-shadow:0 28px 80px rgba(20,35,55,.28);display:flex;flex-direction:column;overflow:hidden}
-.guide-head{display:flex;align-items:center;gap:12px;padding:15px 18px;border-bottom:1px solid var(--line);background:#edf3f8;flex:0 0 auto}
-.guide-head-text{min-width:0;flex:1}.guide-head h2{margin:0;font-size:20px;color:#173246}.guide-head p{margin:2px 0 0;color:var(--muted);font-size:12px}
-.guide-close{width:40px;height:40px;border:1px solid #cbd7e2;border-radius:12px;background:#fff;font-size:23px;line-height:1;color:#294a61;cursor:pointer}
-.guide-body{overflow:auto;padding:17px 18px 26px;scroll-behavior:smooth}
-.guide-intro{background:#f3f7fa;border:1px solid #d8e3ec;border-radius:15px;padding:12px 14px;margin-bottom:13px}
-.guide-intro strong{color:#173246}
-.guide-quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:11px 0 15px}
-.guide-quick a{display:block;text-decoration:none;background:#fff;border:1px solid #cfdae5;border-radius:11px;padding:9px 10px;color:#244b66;font-size:12px;font-weight:800;text-align:center}
-.guide-quick a:hover{background:#edf4f8}
-.guide-section{border:1px solid #d9e2eb;border-radius:14px;margin:9px 0;background:#fff;overflow:hidden;scroll-margin-top:10px}
-.guide-section>summary{cursor:pointer;padding:12px 14px;font-weight:900;background:#f3f6f9;color:#1e3e53;list-style:none;display:flex;align-items:center;gap:8px}
-.guide-section>summary::-webkit-details-marker{display:none}.guide-section>summary:before{content:'›';font-size:20px;line-height:1;transform:rotate(0deg);transition:.15s}.guide-section[open]>summary:before{transform:rotate(90deg)}
-.guide-content{padding:12px 15px 15px;color:#28384b}.guide-content p{margin:7px 0}.guide-content ol,.guide-content ul{margin:7px 0 8px 21px;padding:0}.guide-content li{margin:5px 0}
-.guide-tip{background:#eef7f2;border-left:4px solid #69a886;border-radius:9px;padding:9px 11px;margin:9px 0}.guide-example{background:#fff8e8;border-left:4px solid #d5aa49;border-radius:9px;padding:9px 11px;margin:9px 0}.guide-warn{background:#f8f1f1;border-left:4px solid #b47a7a;border-radius:9px;padding:9px 11px;margin:9px 0}
-.guide-kbd{display:inline-block;border:1px solid #cbd5df;border-bottom-width:2px;border-radius:6px;background:#fff;padding:1px 6px;font-size:11px;font-weight:800}
-.guide-mini-table{width:100%;border-collapse:collapse;margin:9px 0;font-size:12px}.guide-mini-table th,.guide-mini-table td{border:1px solid #d8e0e8;padding:7px;text-align:left;vertical-align:top}.guide-mini-table th{background:#f2f6f9;color:#29495f}
-.help-btn{background:#eef5f9;border-color:#c8d8e4;color:#234a63}
-@media(max-width:760px){.guide-overlay{padding:0}.guide-panel{width:100%;height:100vh;max-height:none;border-radius:0}.guide-quick{grid-template-columns:repeat(2,minmax(0,1fr))}.guide-head{padding-top:max(12px,env(safe-area-inset-top))}}
-@media print{.guide-overlay{display:none!important}}
-
-</style>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; }
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Mobile optimizations */
+        button, select, label { touch-action: manipulation; }
+        .math-scroll { overflow-x: auto; padding-bottom: 4px; max-width: 100%; display: block; }
+        .math-scroll::-webkit-scrollbar { height: 4px; }
+        .math-scroll::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        .math-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
 </head>
-<body>
-<div class="app">
-  <div class="topbar">
-    <div class="toprow">
-      <div class="brand">SCAFFOLD PRO <span data-i="appTitle">Конструктор урока</span><small data-i="subtitle">офлайн-планировщик для учителя по карточкам SCAFFOLD</small></div>
-      <div class="lang"><button id="ruBtn" class="active">РУС</button><button id="kzBtn">ҚАЗ</button></div>
-      <button class="btn" id="undoBtn" data-i="undo" title="Ctrl+Z">↶ Отменить</button>
-      <button class="btn" id="redoBtn" data-i="redo" title="Ctrl+Y">↷ Вернуть</button>
-      <button class="btn smart-lite" id="smartJumpBtn" data-i="assistantJump">✨ Помощник</button>
-      <button class="btn help-btn no-print" id="guideBtn" data-i="guideBtn">❓ Инструкция</button>
-      <button class="btn" id="saveBtn" data-i="save">Сохранить</button>
-      <button class="btn" id="exportBtn" data-i="export">Экспорт</button>
-      <button class="btn" id="importBtn" data-i="import">Импорт</button>
-      <button class="btn" id="wordBtn" data-i="word">Word</button>
-      <button class="btn primary" id="printBtn" data-i="print">Печать / PDF</button>
-      <input type="file" id="fileInput" accept="application/json" hidden />
-    </div>
-  </div>
+<body class="text-slate-800 min-h-screen pb-12">
 
-  <div class="layout">
-    <main class="leftcol">
-      <section class="card">
-        <div class="section-title"><div><h2 data-i="taskCards">Карточки «Задание»</h2><div class="hint" data-i="taskHint">Сначала задайте рамку урока. Эти поля повторяют логику карточек задания.</div></div><span class="badge">0 → 1</span></div>
-        <div class="task-grid">
-          <div class="task-tile"><strong data-i="duration">Длительность</strong><input id="duration" type="number" min="10" max="180" value="45"></div>
-          <div class="task-tile"><strong data-i="goal">Цель занятия</strong><textarea id="goal" data-ph="goalPh" placeholder="Что должны понять/сделать учащиеся?"></textarea></div>
-          <div class="task-tile"><strong data-i="topic">Тема</strong><textarea id="topic" data-ph="topicPh" placeholder="Тема / раздел программы"></textarea></div>
-          <div class="task-tile"><strong data-i="needs">Потребности учащихся / необходимая поддержка</strong><textarea id="needs" data-ph="needsPh" placeholder="Что нужно учащимся для успешного достижения цели?"></textarea><div class="task-help" data-i="needsHelp">Например: повторение базовых понятий, образец, визуализация, пошаговая инструкция, языковая поддержка, работа в паре, дополнительное усложнение для сильных учащихся.</div></div>
-          <div class="task-tile"><strong data-i="audience">Целевая аудитория</strong><textarea id="audience" data-ph="audiencePh" placeholder="Класс, группа, число учащихся"></textarea></div>
-          <div class="task-tile"><strong data-i="place">Место</strong><textarea id="place" data-ph="placePh" placeholder="Кабинет, лаборатория, улица…"></textarea></div>
-          <div class="task-tile"><strong data-i="baseResources">Ресурсы</strong><textarea id="baseResources" data-ph="resourcesPh" placeholder="Оборудование, материалы, люди"></textarea></div>
-          <div class="task-tile"><strong data-i="realLife">Связь с реальной жизнью</strong><textarea id="realLife" data-ph="lifePh" placeholder="Какой реальный контекст будет использован?"></textarea></div>
+    <nav class="bg-indigo-600 text-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center w-[65%] sm:w-auto">
+                    <svg class="w-7 h-7 sm:w-8 sm:h-8 mr-2 sm:mr-3 text-indigo-200 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    <span class="font-bold text-sm sm:text-lg md:text-xl tracking-tight truncate" id="ui-title">Тренажер: Тепловое равновесие</span>
+                </div>
+                <div class="flex bg-indigo-800/50 p-1 rounded-lg flex-shrink-0">
+                    <button id="lang-ru" onclick="setLang('ru')" class="px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-colors bg-white text-indigo-700 shadow">РУС</button>
+                    <button id="lang-kk" onclick="setLang('kk')" class="px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium transition-colors text-indigo-100 hover:text-white">ҚАЗ</button>
+                </div>
+            </div>
         </div>
-      </section>
+    </nav>
 
-      <section class="card assistant-card" id="smartAssistantCard">
-        <div class="assistant-head">
-          <div class="assistant-title"><div class="assistant-icon">✦</div><div><h2 data-i="assistantTitle">Умный помощник</h2><div class="hint" data-i="assistantHint">Анализирует тему, цель и формат урока и предлагает варианты по логике карточек SCAFFOLD. Окончательное решение остаётся за учителем.</div></div></div>
-          <span class="assistant-badge" data-i="assistantOffline">работает офлайн</span>
+    <!-- Custom Toast Notification instead of alert() -->
+    <div id="toast" class="fixed top-20 right-4 sm:right-8 z-50 px-5 py-3 rounded-lg shadow-lg font-medium transition-opacity duration-300 opacity-0 hidden pointer-events-none"></div>
+
+    <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-6 sm:mt-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
+            
+            <!-- Left Column: Theory & Constants -->
+            <div class="lg:col-span-4 space-y-6">
+                <!-- Theory Box -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="bg-slate-50 border-b border-slate-100 px-4 sm:px-5 py-3.5 sm:py-4">
+                        <h2 class="font-bold text-slate-700 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            <span id="ui-theoryTitle">Теория и формулы</span>
+                        </h2>
+                    </div>
+                    <div class="p-4 sm:p-5 text-sm text-slate-600 leading-relaxed">
+                        <p class="mb-3" id="ui-theoryText">Количество теплоты, отданное более нагретыми телами, равно количеству теплоты, полученному менее нагретыми телами:</p>
+                        <div class="bg-indigo-50 text-indigo-900 rounded-lg p-3 text-center mb-4 font-medium math-scroll">
+                            \( Q_{\text{отд}} = Q_{\text{пол}} \)
+                        </div>
+                        <ul class="list-disc pl-5 space-y-1.5" id="ui-theoryList">
+                            <li>\( Q = cm(t_2 - t_1) \) — нагревание</li>
+                            <li>\( Q = cm(t_1 - t_2) \) — охлаждение</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Constants Box -->
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                    <div class="bg-slate-50 border-b border-slate-100 px-4 sm:px-5 py-3.5 sm:py-4">
+                        <h2 class="font-bold text-slate-700 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                            <span id="ui-constantsTitle">Справочник c, Дж/(кг·°C)</span>
+                        </h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left whitespace-nowrap">
+                            <thead class="text-xs text-slate-500 uppercase bg-slate-50 border-b">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3" id="ui-constCol1">Вещество</th>
+                                    <th scope="col" class="px-4 py-3 text-right">c</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100" id="ui-constantsBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Practice -->
+            <div class="lg:col-span-8">
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 sm:p-6 md:p-8">
+                    
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-5 sm:mb-6 pb-4 border-b border-slate-100 gap-3 sm:gap-4">
+                        <h2 class="text-lg sm:text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                            </span>
+                            <span id="ui-practiceTitle">Практика: Пошаговое решение</span>
+                        </h2>
+                        <div class="bg-indigo-50 text-indigo-700 font-semibold px-4 py-1.5 rounded-full text-sm shadow-inner self-start sm:self-auto" id="task-counter">
+                            Задача 1
+                        </div>
+                    </div>
+
+                    <!-- Task Text -->
+                    <div class="bg-indigo-50/60 rounded-xl p-4 sm:p-5 mb-6 sm:mb-8 text-slate-700 text-base sm:text-lg leading-relaxed shadow-inner border border-indigo-100/50" id="task-text"></div>
+
+                    <!-- Steps Container -->
+                    <div id="guided-steps-container" class="space-y-4 mb-6 sm:mb-8"></div>
+
+                    <!-- Next Task / Solution Container -->
+                    <div id="next-task-container" class="hidden flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 fade-in">
+                        <button onclick="generateNewTask()" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-5 sm:px-6 py-3.5 rounded-xl shadow-sm transition-all text-base sm:text-lg flex items-center justify-center gap-2 transform hover:-translate-y-0.5 hover:shadow-md active:scale-95">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span id="ui-nextTaskBtn">Следующая задача</span>
+                        </button>
+                        
+                        <button onclick="toggleSolution()" id="btn-solution" class="sm:flex-none bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium px-5 sm:px-6 py-3.5 rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 active:scale-95">
+                            <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <span id="ui-showSolution">Показать решение</span>
+                        </button>
+                    </div>
+
+                    <!-- Full Solution Box -->
+                    <div id="solution-box" class="hidden mt-6 bg-slate-50 border border-slate-200 rounded-xl p-4 sm:p-6 fade-in overflow-hidden">
+                        <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                            <span id="ui-solutionTitle">Полное решение:</span>
+                        </h3>
+                        <div id="solution-text" class="text-slate-700 leading-relaxed space-y-2 text-sm sm:text-base math-scroll"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="assistant-controls">
-          <div class="field"><label data-i="assistantSubject">Предмет</label><select id="assistantSubject"></select></div>
-          <div class="field"><label data-i="assistantLessonType">Тип урока</label><select id="assistantLessonType"></select></div>
-          <div class="field"><label data-i="assistantFocus">Методический акцент</label><select id="assistantFocus"></select></div>
-        </div>
-        <div class="assistant-actions">
-          <button class="btn smart" id="assistantAnalyzeBtn" data-i="assistantAnalyze">✦ Подобрать рекомендации</button>
-          <button class="btn smart-lite" id="assistantApplyAllBtn" data-i="assistantApplyAll" disabled>Применить всё</button>
-          <button class="btn" id="assistantApplyCompBtn" data-i="assistantApplyComp" disabled>Только компетенции</button>
-          <button class="btn" id="assistantApplyTimelineBtn" data-i="assistantApplyTimeline" disabled>Только хронологию</button>
-        </div>
-        <div class="assistant-result" id="assistantResult"></div>
-        <div class="quality-note" data-i="assistantNote">Помощник использует офлайн-правила, связи компетенций и методы из карточек SCAFFOLD. Он не заменяет методическое решение учителя. Заполненные поля результата, доказательства и критериев не перезаписываются при «Применить всё».</div>
-      </section>
-
-      <section class="card">
-        <div class="section-title"><div><h2 data-i="planningCards">7 карточек «Планирование»</h2><div class="hint" data-i="planningHint">Пройдите по шагам слева направо. Приложение проверит, что опора постепенно снимается.</div></div><span class="badge ok" id="progressBadge">0 / 7</span></div>
-        <div class="steps" id="steps"></div>
-        <div id="stepPanes"></div>
-      </section>
-
-      <section class="card">
-        <div class="section-title"><div><h2 data-i="scaffoldControl">Контроль scaffolding</h2><div class="hint" data-i="scaffoldHint">Проверка не только структуры карточек, но и постепенного перехода от сильной поддержки учителя к самостоятельности ученика.</div></div><button class="btn" id="autoBtn" data-i="autoDraft">Создать черновик хронологии</button></div>
-        <div class="checklist" id="checklist"></div>
-        <div class="callout" data-i="supportRule">Логика поддержки: диагностика → модель/пример → совместное выполнение → частичное снятие опор → самостоятельное действие → рефлексия.</div>
-      </section>
-      <section class="card">
-        <div class="section-title"><div><h2 data-i="qualityTitle">Проверка по 7 принципам SCAFFOLD</h2><div class="hint" data-i="qualityHint">Автоподсказка по принципам руководства 2024. Это не оценка качества урока, а напоминание при планировании.</div></div><span class="quality-score" id="qualityScore">0 / 7</span></div>
-        <div class="quality-grid" id="qualityChecklist"></div>
-        <div class="quality-note" data-i="qualityNote">Подсказки формируются по заполненному плану. Учитель принимает окончательное методическое решение.</div>
-      </section>
-
     </main>
 
-    <aside class="rightcol">
-      <section class="card preview">
-        <div class="section-title"><div><h2 data-i="preview">Готовый план</h2><div class="hint" data-i="previewHint">Обновляется автоматически. Можно печатать или сохранить как PDF.</div></div><button class="btn no-print" id="copyBtn" data-i="copy">Копировать</button></div>
-        <div class="plan" id="planPreview"></div>
-        <div class="source-note" data-i="sourceNote">Структура приложения следует карточкам «Задание» и семи карточкам «Планирование» SCAFFOLD; блок постепенного снятия опор добавлен как практический механизм scaffolding.</div>
-      </section>
-    </aside>
-  </div>
-</div>
+    <script>
+        const materials = {
+            water: { c: 4200 },
+            aluminum: { c: 920 },
+            iron: { c: 460 },
+            copper: { c: 400 }
+        };
 
-<div class="guide-overlay no-print" id="guideOverlay" aria-hidden="true">
-  <div class="guide-panel" role="dialog" aria-modal="true" aria-labelledby="guideTitleRu">
-    <div class="guide-head">
-      <div class="guide-head-text">
-        <div data-guide-lang="ru"><h2 id="guideTitleRu">Инструкция SCAFFOLD SMART</h2><p>Краткая подсказка всегда внутри приложения — можно открыть в любой момент.</p></div>
-        <div data-guide-lang="kz" hidden><h2 id="guideTitleKz">SCAFFOLD SMART нұсқаулығы</h2><p>Қысқаша көмек әрқашан қолданбаның ішінде — кез келген уақытта ашуға болады.</p></div>
-      </div>
-      <button class="guide-close" id="guideCloseBtn" type="button" aria-label="Закрыть">×</button>
-    </div>
-    <div class="guide-body" id="guideBody">
-      <div class="guide-lang" data-guide-lang="ru">
-        <div class="guide-intro"><strong>Как пользоваться:</strong> сначала задайте рамку урока, затем при желании получите рекомендации умного помощника и пройдите 7 шагов планирования. Приложение ничего не решает вместо учителя — оно помогает не забыть важные элементы.</div>
-        <div class="guide-quick">
-          <a href="#ru-start">Быстрый старт</a><a href="#ru-assistant">Умный помощник</a><a href="#ru-seven">7 шагов</a><a href="#ru-output">Word / PDF</a>
-        </div>
+        const i18n = {
+            ru: {
+                title: "Тренажер: Тепловое равновесие (8 класс)",
+                theoryTitle: "Теория и формулы",
+                theoryText: "Количество теплоты, отданное более нагретыми телами, равно количеству теплоты, полученному менее нагретыми телами:",
+                theoryList1: "\\( Q = cm(t_2 - t_1) \\) — нагревание",
+                theoryList2: "\\( Q = cm(t_1 - t_2) \\) — охлаждение",
+                constTitle: "Справочник c, Дж/(кг·°C)",
+                constCol1: "Вещество",
+                substances: { water: "Вода", aluminum: "Алюминий", iron: "Железо", copper: "Медь" },
+                practiceTitle: "Практика: Пошаговое решение",
+                taskPrefix: "Задача",
+                nextTaskBtn: "Следующая задача",
+                showSolution: "Показать решение",
+                hideSolution: "Скрыть решение",
+                solutionTitle: "Полное решение:",
+                stepPrompt: "ЭТАП",
+                checkBtn: "Проверить ответ",
+                selectOption: "-- Выберите --",
+                correctMsg: "Верно! Переходим к следующему этапу.",
+                incorrectMsg: "Ошибка. Подумайте еще раз!",
+                step1Title: "Анализ условия",
+                step1Q: "Внимательно прочитайте задачу. Какие величины нам ДАНЫ, а какую нужно НАЙТИ? Отметьте их галочками (остальное - лишнее).",
+                step2Title: "Запись «Дано»",
+                step2Q: "Сопоставьте числовые значения из задачи с их физическими обозначениями:",
+                step3Title: "Выбор формулы",
+                step3Q: "Выберите правильное уравнение теплового баланса (\\( Q_{\\text{отд}} = Q_{\\text{пол}} \\)):",
+                step4Title: "Вычисление",
+                step4Q: "Подставьте значения в формулу, вычислите и выберите правильный ответ:"
+            },
+            kk: {
+                title: "Тренажер: Жылулық тепе-теңдік (8 сынып)",
+                theoryTitle: "Теория және формулалар",
+                theoryText: "Қатты қызған денелердің берген жылу мөлшері аз қызған денелердің алған жылу мөлшеріне тең:",
+                theoryList1: "\\( Q = cm(t_2 - t_1) \\) — қызу",
+                theoryList2: "\\( Q = cm(t_1 - t_2) \\) — сууы",
+                constTitle: "Анықтамалық c, Дж/(кг·°C)",
+                constCol1: "Зат",
+                substances: { water: "Су", aluminum: "Алюминий", iron: "Темір", copper: "Мыс" },
+                practiceTitle: "Тәжірибе: Қадамдық шешім",
+                taskPrefix: "Есеп",
+                nextTaskBtn: "Келесі есеп",
+                showSolution: "Шешуін көрсету",
+                hideSolution: "Шешуін жасыру",
+                solutionTitle: "Толық шешімі:",
+                stepPrompt: "ҚАДАМ",
+                checkBtn: "Жауапты тексеру",
+                selectOption: "-- Таңдаңыз --",
+                correctMsg: "Дұрыс! Келесі қадамға өтеміз.",
+                incorrectMsg: "Қате бар. Қайта ойланып көріңіз!",
+                step1Title: "Шартты талдау",
+                step1Q: "Есепті мұқият оқыңыз. Бізге қандай шамалар БЕРІЛГЕН және нені ТАБУ КЕРЕК? Оларды белгілеңіз (қалғаны - артық).",
+                step2Title: "«Берілгенін» жазу",
+                step2Q: "Есептегі сандық мәндерді олардың физикалық белгілерімен сәйкестендіріңіз:",
+                step3Title: "Формуланы таңдау",
+                step3Q: "Дұрыс жылулық баланс теңдеуін таңдаңыз (\\( Q_{\\text{бер}} = Q_{\\text{ал}} \\)):",
+                step4Title: "Есептеу",
+                step4Q: "Мәндерді формулаға қойып, есептеңіз және дұрыс жауапты таңдаңыз:"
+            }
+        };
 
-        <details class="guide-section" id="ru-start" open><summary>1. Быстрый старт: с чего начать</summary><div class="guide-content">
-          <ol><li>Выберите язык <b>РУС / ҚАЗ</b>.</li><li>Заполните <b>длительность, тему и цель урока</b>.</li><li>Укажите класс/группу и при необходимости потребности учащихся.</li><li>Откройте <b>✨ Помощник</b> и нажмите «Подобрать рекомендации» — либо планируйте полностью вручную.</li><li>Пройдите 7 карточек планирования слева направо.</li><li>Проверьте хронологию, постепенное снятие опоры и 7 принципов SCAFFOLD.</li><li>Нажмите <b>Word</b> или <b>Печать / PDF</b>.</li></ol>
-          <div class="guide-tip"><b>Совет.</b> Не обязательно заполнять всё за один раз. Кнопка «Сохранить» сохраняет текущий план на этом устройстве.</div>
-        </div></details>
+        let currentLang = 'ru';
+        let taskCount = 0;
+        let currentTask = null;
+        let activeSteps = [];
+        let currentStepIndex = 0;
 
-        <details class="guide-section" id="ru-task"><summary>2. Карточки «Задание»: что писать в полях</summary><div class="guide-content">
-          <table class="guide-mini-table"><tr><th>Поле</th><th>Что указывать</th></tr>
-          <tr><td><b>Длительность</b></td><td>Общее время урока, например 40, 45 или 90 минут.</td></tr>
-          <tr><td><b>Цель занятия</b></td><td>Что ученик должен понять, уметь сделать или объяснить к концу урока.</td></tr>
-          <tr><td><b>Тема</b></td><td>Тема или раздел учебной программы.</td></tr>
-          <tr><td><b>Потребности учащихся / необходимая поддержка</b></td><td>Что именно поможет этой группе успешно достичь цели: повторение базы, образец, схема, визуализация, пошаговая инструкция, языковая поддержка, работа в паре или усложнение для сильных.</td></tr>
-          <tr><td><b>Целевая аудитория</b></td><td>Класс/курс, группа, при необходимости число учащихся.</td></tr>
-          <tr><td><b>Место</b></td><td>Кабинет, лаборатория, мастерская, улица и т. п.</td></tr>
-          <tr><td><b>Ресурсы</b></td><td>Оборудование, материалы, цифровые инструменты и люди, которые нужны для урока.</td></tr>
-          <tr><td><b>Связь с реальной жизнью</b></td><td>Где ученик встречает явление, проблему или навык вне учебника.</td></tr></table>
-          <div class="guide-example"><b>Пример «Потребностей»:</b> «Часть учащихся затрудняется читать графики. Нужны визуальный образец, пошаговая схема анализа и работа в паре; сильным учащимся — задача в новом контексте без готового алгоритма».</div>
-        </div></details>
+        function showToast(msg, type = "error") {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = `fixed top-20 right-4 sm:right-8 z-50 px-5 py-3 rounded-lg shadow-lg font-medium transition-all duration-300 transform ${type === 'error' ? 'bg-red-500 text-white' : 'bg-emerald-500 text-white'} translate-y-0 opacity-100`;
+            t.style.display = 'block';
+            setTimeout(() => {
+                t.classList.add('opacity-0', '-translate-y-2');
+                setTimeout(() => { t.style.display = 'none'; t.classList.remove('opacity-0', '-translate-y-2'); }, 300);
+            }, 2500);
+        }
 
-        <details class="guide-section" id="ru-assistant"><summary>3. Умный помощник: как им пользоваться</summary><div class="guide-content">
-          <p>Помощник работает <b>офлайн</b> и анализирует тему, цель, предмет, тип урока и выбранный методический акцент.</p>
-          <ol><li>Заполните тему и/или цель.</li><li>В блоке «Умный помощник» выберите <b>предмет</b>, <b>тип урока</b> и <b>методический акцент</b>.</li><li>Нажмите <b>«✦ Подобрать рекомендации»</b>.</li><li>Просмотрите объяснение: компетенции, сквозные акценты, методы обучения, оценивание, ожидаемый результат, доказательство и хронологию.</li><li>Выберите способ применения: <b>«Применить всё»</b>, <b>«Только компетенции»</b> или <b>«Только хронологию»</b>.</li></ol>
-          <div class="guide-tip">Уже заполненные вами поля результата, доказательства и критериев не должны автоматически заменяться при применении всех рекомендаций. После применения всё можно отредактировать вручную.</div>
-          <div class="guide-warn">Помощник — методическая подсказка, а не обязательное решение. Оставляйте только те рекомендации, которые соответствуют вашему классу и цели урока.</div>
-        </div></details>
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
 
-        <details class="guide-section" id="ru-seven"><summary>4. Семь карточек планирования SCAFFOLD</summary><div class="guide-content">
-          <ol><li><b>Компетенции.</b> Выберите, какие компетенции реально будут развиваться на уроке. Семь сквозных компетенций выделены заметнее и могут использоваться как навигатор по связанным карточкам.</li><li><b>Начальный уровень.</b> Для каждой выбранной компетенции определите, какая поддержка нужна учащимся и как вы это проверите.</li><li><b>Метод обучения.</b> Выберите один или несколько методов. Под каждой карточкой есть «Как провести».</li><li><b>Ожидаемый результат.</b> Запишите результат, конкретный продукт/доказательство и критерии успеха.</li><li><b>Оценивание.</b> Выберите способы, которыми будете видеть прогресс в процессе урока.</li><li><b>Ресурсы.</b> Укажите материалы, оборудование и людей.</li><li><b>Хронология.</b> Распределите этапы и время урока.</li></ol>
-          <div class="guide-tip">Если выбранных основных компетенций меньше трёх, приложение может напомнить рассмотреть дополнительные связанные компетенции. Это рекомендация, а не запрет.</div>
-        </div></details>
+        function getRandomInt(min, max, step = 1) {
+            return Math.floor(Math.random() * ((max - min) / step + 1)) * step + min;
+        }
 
-        <details class="guide-section" id="ru-compet"><summary>5. Как выбирать компетенции</summary><div class="guide-content">
-          <p>Используйте один из трёх режимов: <b>по конкретной компетенции</b>, <b>по сквозной компетенции</b> или <b>случайная идея</b>.</p>
-          <p>При выборе карточки приложение показывает <b>рекомендуемые связи</b> с другими компетенциями. Нажимайте «Добавить» только там, где связь действительно нужна для вашего урока.</p>
-          <div class="guide-example"><b>Пример:</b> для лабораторного исследования по физике могут сочетаться критическое мышление, аналитические навыки, сотрудничество и компетенции работы с цифровыми данными.</div>
-        </div></details>
+        function updateUI() {
+            const ui = i18n[currentLang];
+            document.getElementById('ui-title').innerText = ui.title;
+            document.getElementById('ui-theoryTitle').innerText = ui.theoryTitle;
+            document.getElementById('ui-theoryText').innerText = ui.theoryText;
+            document.getElementById('ui-theoryList').innerHTML = `<li>${ui.theoryList1}</li><li>${ui.theoryList2}</li>`;
+            document.getElementById('ui-constantsTitle').innerText = ui.constTitle;
+            document.getElementById('ui-constCol1').innerText = ui.constCol1;
+            document.getElementById('ui-practiceTitle').innerText = ui.practiceTitle;
+            document.getElementById('ui-nextTaskBtn').innerText = ui.nextTaskBtn;
+            document.getElementById('ui-showSolution').innerText = ui.showSolution;
+            document.getElementById('ui-solutionTitle').innerText = ui.solutionTitle;
+            
+            let tbody = '';
+            for (const [key, val] of Object.entries(materials)) {
+                tbody += `<tr class="hover:bg-slate-50"><td class="px-4 py-2 sm:py-3 font-medium">${ui.substances[key]}</td><td class="px-4 py-2 sm:py-3 text-right">${val.c}</td></tr>`;
+            }
+            document.getElementById('ui-constantsBody').innerHTML = tbody;
+            
+            document.getElementById('task-counter').innerText = `${ui.taskPrefix} ${taskCount}`;
+            renderMath();
+        }
 
-        <details class="guide-section" id="ru-scaffold"><summary>6. Хронология и постепенное снятие опоры</summary><div class="guide-content">
-          <p>Хронология показывает не только время, но и <b>уровень педагогической поддержки</b>.</p>
-          <p>Рабочая логика: <b>диагностика → образец учителя → совместное выполнение → уменьшение подсказок → самостоятельное применение → рефлексия</b>.</p>
-          <p>Кнопка <b>«Создать черновик хронологии»</b> распределяет этапы под указанную длительность. После этого обязательно адаптируйте формулировки под конкретную тему.</p>
-          <div class="guide-tip">Смотрите, чтобы к концу урока опора действительно уменьшалась, а самостоятельность ученика возрастала.</div>
-        </div></details>
+        function setLang(lang) {
+            currentLang = lang;
+            document.getElementById('lang-ru').className = lang === 'ru' ? 'px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium bg-white text-indigo-700 shadow' : 'px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium text-indigo-100 hover:text-white';
+            document.getElementById('lang-kk').className = lang === 'kk' ? 'px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium bg-white text-indigo-700 shadow' : 'px-3 sm:px-4 py-1.5 rounded-md text-xs sm:text-sm font-medium text-indigo-100 hover:text-white';
+            
+            updateUI();
+            if (taskCount > 0) {
+                // If a task exists, redraw it with the new language
+                // Note: To keep things simple in this fix, we just regenerate the task fully
+                // so the arrays and strings update cleanly.
+                generateNewTask();
+            }
+        }
 
-        <details class="guide-section" id="ru-quality"><summary>7. Проверка по 7 принципам SCAFFOLD</summary><div class="guide-content">
-          <p>Внизу приложение показывает, какие элементы плана уже отражены: связь с реальным контекстом, активность ученика, рефлексия, самостоятельность/выбор, взаимодействие, связь с обществом/внешним контекстом и доказательства прогресса.</p>
-          <div class="guide-warn"><b>Важно:</b> это не оценка качества вашего урока и не балл учителю. Это чек-лист, помогающий заметить возможные пробелы.</div>
-        </div></details>
+        function renderMath() {
+            if (window.renderMathInElement) {
+                renderMathInElement(document.body, {
+                    delimiters: [
+                        {left: '$$', right: '$$', display: true},
+                        {left: '\\(', right: '\\)', display: false}
+                    ],
+                    throwOnError: false
+                });
+            }
+        }
 
-        <details class="guide-section" id="ru-output"><summary>8. Сохранение, Word, PDF, перенос плана</summary><div class="guide-content">
-          <ul><li><b>Сохранить</b> — сохраняет текущий план в браузере на этом устройстве.</li><li><b>Экспорт</b> — создаёт JSON-файл плана. Он нужен, чтобы перенести или сделать резервную копию.</li><li><b>Импорт</b> — загружает ранее экспортированный JSON.</li><li><b>Word</b> — создаёт редактируемый файл <b>.docx</b> с готовым планом.</li><li><b>Печать / PDF</b> — открывает системное окно печати; там можно выбрать «Сохранить как PDF».</li><li><b>Копировать</b> — копирует текст готового плана справа.</li></ul>
-          <div class="guide-tip">Для важного плана лучше использовать и «Сохранить», и «Экспорт»: локальное сохранение удобно, а JSON служит резервной копией.</div>
-        </div></details>
+        function generateNewTask() {
+            taskCount++;
+            document.getElementById('task-counter').innerText = `${i18n[currentLang].taskPrefix} ${taskCount}`;
+            document.getElementById('solution-box').classList.add('hidden');
+            document.getElementById('next-task-container').classList.add('hidden');
+            document.getElementById('btn-solution').innerHTML = `<svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> <span id="ui-showSolution">${i18n[currentLang].showSolution}</span>`;
+            
+            currentStepIndex = 0;
+            activeSteps = [];
 
-        <details class="guide-section" id="ru-undo"><summary>9. Если случайно что-то удалили</summary><div class="guide-content">
-          <p>Используйте <b>↶ Отменить</b> и <b>↷ Вернуть</b> в верхней панели. Для обычного текста внутри поля также работают привычные <span class="guide-kbd">Ctrl+Z</span> и <span class="guide-kbd">Ctrl+Y</span>.</p>
-          <p>История приложения помогает вернуть последние изменения выбранных карточек, этапов хронологии и других параметров.</p>
-        </div></details>
+            const metals = ['aluminum', 'iron', 'copper'];
+            const metal = metals[Math.floor(Math.random() * metals.length)];
+            const uiSubst = i18n[currentLang].substances;
+            
+            // Generate valid physics values
+            let m1 = getRandomInt(1, 5, 1); // Water mass (1-5 kg)
+            let t1 = getRandomInt(10, 30, 5); // Water initial temp (10-30 C)
+            let m2 = getRandomInt(2, 8, 1) / 10; // Metal mass (0.2-0.8 kg)
+            let t2 = getRandomInt(80, 150, 10); // Metal initial temp (80-150 C)
+            
+            const c1 = materials.water.c;
+            const c2 = materials[metal].c;
+            
+            // Calculate real final temp t3
+            // c1*m1*(t3 - t1) = c2*m2*(t2 - t3)
+            let t3 = (c1*m1*t1 + c2*m2*t2) / (c1*m1 + c2*m2);
+            t3 = Math.round(t3 * 10) / 10; 
 
-        <details class="guide-section" id="ru-faq"><summary>10. Частые вопросы</summary><div class="guide-content">
-          <p><b>Нужен интернет?</b> Нет. Основные функции, помощник и экспорт Word работают офлайн.</p>
-          <p><b>Можно менять рекомендации помощника?</b> Да. Любое предложение можно удалить или отредактировать.</p>
-          <p><b>Можно переключить язык в середине работы?</b> Да. Данные плана сохраняются, интерфейс переключается РУС/ҚАЗ.</p>
-          <p><b>Почему готовый план справа меняется сам?</b> Это предпросмотр: он автоматически собирается из заполненных вами данных.</p>
-          <p><b>Нужно ли использовать все компетенции?</b> Нет. Выбирайте только те, которые действительно проявятся в деятельности учащихся.</p>
-        </div></details>
-      </div>
+            // Texts and labels
+            let t_waterMass = currentLang === 'ru' ? "Масса воды" : "Су массасы";
+            let t_waterT1 = currentLang === 'ru' ? "Нач. температура воды" : "Судың бас. температурасы";
+            let t_waterC = currentLang === 'ru' ? "Уд. теплоемкость воды" : "Судың меншікті жылу сыйымдылығы";
+            let t_metalMass = currentLang === 'ru' ? `Масса (${uiSubst[metal].toLowerCase()})` : `Массасы (${uiSubst[metal].toLowerCase()})`;
+            let t_metalT2 = currentLang === 'ru' ? "Нач. температура металла" : "Металдың бас. температурасы";
+            let t_metalC = currentLang === 'ru' ? "Уд. теплоемкость металла" : "Металдың мен. жылу сыйымдылығы";
+            let t_finalT3 = currentLang === 'ru' ? "Конечная температура" : "Соңғы температура";
+            
+            // Distractors
+            let d1 = currentLang === 'ru' ? "Объем сосуда" : "Ыдыстың көлемі";
+            let d2 = currentLang === 'ru' ? "Время нагрева" : "Қыздыру уақыты";
+            let d3 = currentLang === 'ru' ? "Плотность воды" : "Судың тығыздығы";
+            let d4 = currentLang === 'ru' ? "Уд. теплота плавления" : "Меншікті балқу жылуы";
 
-      <div class="guide-lang" data-guide-lang="kz" hidden>
-        <div class="guide-intro"><strong>Қалай пайдалану керек:</strong> алдымен сабақтың негізгі шеңберін белгілеңіз, кейін қажет болса ақылды көмекшінің ұсыныстарын алыңыз және жоспарлаудың 7 қадамынан өтіңіз. Қолданба мұғалімнің орнына шешім қабылдамайды — маңызды бөліктерді ұмытпауға көмектеседі.</div>
-        <div class="guide-quick">
-          <a href="#kz-start">Жылдам бастау</a><a href="#kz-assistant">Ақылды көмекші</a><a href="#kz-seven">7 қадам</a><a href="#kz-output">Word / PDF</a>
-        </div>
+            // Task generation text
+            let taskText = currentLang === 'ru' ?
+                `В воду массой ${m1} кг, взятую при температуре ${t1} °C, опустили деталь из материала "${uiSubst[metal]}" массой ${m2} кг при температуре ${t2} °C. Найдите конечную температуру установившегося теплового равновесия.` :
+                `Массасы ${m1} кг, ${t1} °C температурадағы суға массасы ${m2} кг, ${t2} °C температурадағы "${uiSubst[metal]}" бөлшегі салынды. Жылулық тепе-теңдік орнағаннан кейінгі соңғы температураны табыңыз.`;
+            
+            document.getElementById('task-text').innerHTML = taskText;
 
-        <details class="guide-section" id="kz-start" open><summary>1. Жылдам бастау: неден бастау керек</summary><div class="guide-content">
-          <ol><li><b>РУС / ҚАЗ</b> тілін таңдаңыз.</li><li><b>Сабақ ұзақтығын, тақырыбын және мақсатын</b> толтырыңыз.</li><li>Сыныпты/топты және қажет болса оқушылардың қажеттіліктерін көрсетіңіз.</li><li><b>✨ Көмекші</b> бөлімін ашып, «Ұсыныстарды таңдау» батырмасын басыңыз немесе жоспарды толығымен өзіңіз құрыңыз.</li><li>Жоспарлаудың 7 карточкасын ретімен өтіңіз.</li><li>Хронологияны, қолдаудың біртіндеп азаюын және SCAFFOLD-тың 7 қағидасын тексеріңіз.</li><li><b>Word</b> немесе <b>Басып шығару / PDF</b> батырмасын басыңыз.</li></ol>
-          <div class="guide-tip"><b>Кеңес.</b> Барлығын бірден толтыру міндетті емес. «Сақтау» батырмасы ағымдағы жоспарды осы құрылғыда сақтайды.</div>
-        </div></details>
+            // --- STEP 1: Checkboxes (What is given/needed, with distractors) ---
+            let allTerms = [t_waterMass, t_waterT1, t_waterC, t_metalMass, t_metalT2, t_metalC, t_finalT3, d1, d2, d3, d4];
+            let correctTerms = [t_waterMass, t_waterT1, t_waterC, t_metalMass, t_metalT2, t_metalC, t_finalT3];
+            
+            // Create shuffled objects
+            let s1Options = allTerms.map(t => ({ text: t, isCorrect: correctTerms.includes(t) }));
+            shuffleArray(s1Options);
+            
+            let s1CorrectIndices = [];
+            s1Options.forEach((opt, idx) => { if(opt.isCorrect) s1CorrectIndices.push(idx); });
 
-        <details class="guide-section" id="kz-task"><summary>2. «Тапсырма» карточкалары: өрістерге не жазу керек</summary><div class="guide-content">
-          <table class="guide-mini-table"><tr><th>Өріс</th><th>Не көрсету керек</th></tr>
-          <tr><td><b>Ұзақтығы</b></td><td>Сабақтың жалпы уақыты: мысалы, 40, 45 немесе 90 минут.</td></tr>
-          <tr><td><b>Сабақ мақсаты</b></td><td>Оқушы сабақ соңында нені түсінуі, орындай алуы немесе түсіндіре алуы керек.</td></tr>
-          <tr><td><b>Тақырып</b></td><td>Оқу бағдарламасының тақырыбы немесе бөлімі.</td></tr>
-          <tr><td><b>Оқушылардың қажеттіліктері / қажетті қолдау</b></td><td>Осы топқа мақсатқа жетуге нақты не көмектеседі: базаны қайталау, үлгі, сызба, визуализация, қадамдық нұсқаулық, тілдік қолдау, жұппен жұмыс немесе қабілеті жоғары оқушыларға күрделендіру.</td></tr>
-          <tr><td><b>Мақсатты аудитория</b></td><td>Сынып/курс, топ, қажет болса оқушылар саны.</td></tr>
-          <tr><td><b>Өтетін орны</b></td><td>Кабинет, зертхана, шеберхана, ашық орта және т.б.</td></tr>
-          <tr><td><b>Ресурстар</b></td><td>Сабаққа қажет құрал-жабдық, материалдар, цифрлық құралдар және адамдар.</td></tr>
-          <tr><td><b>Шынайы өмірмен байланыс</b></td><td>Оқушы бұл құбылысты, мәселені немесе дағдыны оқулықтан тыс қайда кездестіреді.</td></tr></table>
-          <div class="guide-example"><b>«Қажеттіліктер» мысалы:</b> «Оқушылардың бір бөлігі графикті оқуда қиналады. Көрнекі үлгі, қадамдық талдау сызбасы және жұптық жұмыс қажет; қабілеті жоғары оқушыларға — дайын алгоритмсіз жаңа контекстегі тапсырма».</div>
-        </div></details>
+            activeSteps.push({
+                type: 'checkbox',
+                title: i18n[currentLang].step1Title,
+                question: i18n[currentLang].step1Q,
+                options: s1Options.map(o => o.text),
+                correct: s1CorrectIndices,
+                solved: false
+            });
 
-        <details class="guide-section" id="kz-assistant"><summary>3. Ақылды көмекші: қалай пайдалану керек</summary><div class="guide-content">
-          <p>Көмекші <b>офлайн</b> жұмыс істейді және тақырыпты, мақсатты, пәнді, сабақ түрін және әдістемелік акцентті талдайды.</p>
-          <ol><li>Тақырыпты және/немесе мақсатты толтырыңыз.</li><li>«Ақылды көмекші» бөлімінде <b>пәнді</b>, <b>сабақ түрін</b> және <b>әдістемелік акцентті</b> таңдаңыз.</li><li><b>«✦ Ұсыныстарды таңдау»</b> батырмасын басыңыз.</li><li>Ұсыныстарды қарап шығыңыз: құзыреттер, сквозной акценттер, оқыту әдістері, бағалау, нәтиже, дәлел және хронология.</li><li>Қолдану тәсілін таңдаңыз: <b>«Барлығын қолдану»</b>, <b>«Тек құзыреттер»</b> немесе <b>«Тек хронология»</b>.</li></ol>
-          <div class="guide-tip">Өзіңіз толтырған нәтиже, дәлел және критерийлер «Барлығын қолдану» кезінде автоматты түрде ауыстырылмауы тиіс. Ұсыныстарды қолданғаннан кейін бәрін қолмен өзгертуге болады.</div>
-          <div class="guide-warn">Көмекші — әдістемелік ұсыныс қана. Сынып пен оқу мақсатына сәйкес келетін нұсқаларды ғана қалдырыңыз.</div>
-        </div></details>
+            // --- STEP 2: Match Variables ---
+            // Let's ask them to match 4 items to keep it readable on mobile
+            let s2Items = [`${m1} ${currentLang==='ru'?'кг':'кг'}`, `${t2} °C`, `${c1} Дж/(кг·°C)`, currentLang==='ru'?"? (Найти)":"? (Табу)"];
+            let s2CorrectVars = ["\\( m_1 \\)", "\\( t_2 \\)", "\\( c_1 \\)", "\\( t_3 \\)"];
+            
+            let allVars = ["\\( m_1 \\)", "\\( t_2 \\)", "\\( c_1 \\)", "\\( t_3 \\)", "\\( m_2 \\)", "\\( t_1 \\)", "\\( Q \\)"];
+            shuffleArray(allVars);
+            
+            // Find correct indices in the shuffled array
+            let s2CorrectIndices = s2CorrectVars.map(v => allVars.indexOf(v));
 
-        <details class="guide-section" id="kz-seven"><summary>4. SCAFFOLD жоспарлауының жеті карточкасы</summary><div class="guide-content">
-          <ol><li><b>Құзыреттер.</b> Сабақта шын мәнінде дамитын құзыреттерді таңдаңыз. Жеті сквозной құзырет айқынырақ белгіленген және байланысты карточкаларға навигатор ретінде қолданылады.</li><li><b>Бастапқы деңгей.</b> Әр таңдалған құзырет бойынша оқушыға қандай қолдау қажет екенін және оны қалай анықтайтыныңызды көрсетіңіз.</li><li><b>Оқыту әдісі.</b> Бір немесе бірнеше әдісті таңдаңыз. Әр карточкада «Қалай өткізуге болады» бөлімі бар.</li><li><b>Күтілетін нәтиже.</b> Нәтижені, нақты өнімді/оқу дәлелін және жетістік критерийлерін жазыңыз.</li><li><b>Бағалау.</b> Сабақ барысында ілгерілеуді көрсететін тәсілдерді таңдаңыз.</li><li><b>Ресурстар.</b> Материалдар, жабдықтар және адамдарды көрсетіңіз.</li><li><b>Хронология.</b> Сабақ кезеңдері мен уақытын бөліңіз.</li></ol>
-          <div class="guide-tip">Негізгі құзыреттер саны үштен аз болса, қолданба байланысты құзыреттерді қарастыруды ұсынуы мүмкін. Бұл ұсыныс, міндетті талап емес.</div>
-        </div></details>
+            activeSteps.push({
+                type: 'match',
+                title: i18n[currentLang].step2Title,
+                question: i18n[currentLang].step2Q,
+                items: s2Items,
+                options: allVars,
+                correct: s2CorrectIndices,
+                solved: false
+            });
 
-        <details class="guide-section" id="kz-compet"><summary>5. Құзыреттерді қалай таңдау керек</summary><div class="guide-content">
-          <p>Үш режимнің бірін пайдаланыңыз: <b>нақты құзырет бойынша</b>, <b>сквозной құзырет бойынша</b> немесе <b>кездейсоқ идея</b>.</p>
-          <p>Карточка таңдалғанда қолданба басқа құзыреттермен <b>ұсынылатын байланыстарды</b> көрсетеді. «Қосу» батырмасын тек осы байланыс сіздің сабағыңызда қажет болған жағдайда басыңыз.</p>
-          <div class="guide-example"><b>Мысал:</b> физикадағы зертханалық зерттеуде сыни ойлау, аналитикалық дағдылар, ынтымақтастық және цифрлық деректермен жұмыс құзыреттері үйлесуі мүмкін.</div>
-        </div></details>
+            // --- STEP 3: MCQ Formula ---
+            let fCorrect = "\\( c_1 m_1 (t_3 - t_1) = c_2 m_2 (t_2 - t_3) \\)";
+            let fWrong1 = "\\( c_1 m_1 (t_1 - t_3) = c_2 m_2 (t_3 - t_2) \\)"; // signs flipped
+            let fWrong2 = "\\( c_1 m_1 t_1 = c_2 m_2 t_2 \\)"; // missing t3
+            let fWrong3 = "\\( c_1 m_1 (t_3 - t_2) = c_2 m_2 (t_3 - t_1) \\)"; // mixed up t1 and t2
+            
+            let fOptionsObj = [
+                { f: fCorrect, isC: true }, { f: fWrong1, isC: false }, 
+                { f: fWrong2, isC: false }, { f: fWrong3, isC: false }
+            ];
+            shuffleArray(fOptionsObj);
+            let s3CorrectIndex = fOptionsObj.findIndex(o => o.isC);
 
-        <details class="guide-section" id="kz-scaffold"><summary>6. Хронология және педагогикалық қолдауды біртіндеп азайту</summary><div class="guide-content">
-          <p>Хронология тек уақытты емес, <b>мұғалім қолдауының деңгейін</b> де көрсетеді.</p>
-          <p>Жұмыс логикасы: <b>диагностика → мұғалім үлгісі → бірлескен орындау → тіректерді азайту → дербес қолдану → рефлексия</b>.</p>
-          <p><b>«Хронология нобайын жасау»</b> батырмасы кезеңдерді көрсетілген уақытқа сәйкестендіреді. Кейін тұжырымдарды нақты сабақ тақырыбына бейімдеңіз.</p>
-          <div class="guide-tip">Сабақ соңына қарай қолдау азайып, оқушының дербестігі артуы керек.</div>
-        </div></details>
+            activeSteps.push({
+                type: 'mcq',
+                title: i18n[currentLang].step3Title,
+                question: i18n[currentLang].step3Q,
+                options: fOptionsObj.map(o => o.f),
+                correct: s3CorrectIndex,
+                solved: false
+            });
 
-        <details class="guide-section" id="kz-quality"><summary>7. SCAFFOLD-тың 7 қағидасы бойынша тексеру</summary><div class="guide-content">
-          <p>Төменгі бөлім жоспардағы келесі элементтердің бар-жоғын көрсетеді: шынайы контекст, оқушы белсенділігі, рефлексия, дербестік/таңдау, өзара әрекет, қоғаммен/сыртқы контекстпен байланыс және ілгерілеудің дәлелі.</p>
-          <div class="guide-warn"><b>Маңызды:</b> бұл сабақ сапасына қойылатын баға немесе мұғалімге берілетін балл емес. Бұл ықтимал олқылықтарды байқауға арналған чек-парақ.</div>
-        </div></details>
+            // --- STEP 4: MCQ Calculation ---
+            let w1 = Math.round((t3 + 5) * 10) / 10;
+            let w2 = Math.round((t3 - 3.5) * 10) / 10;
+            let w3 = Math.round((c1*m1*t1 + c2*m2*t2) / (c1*m1 - c2*m2) * 10)/10; // math error distractor
+            if (w3 < 0 || w3 > 200) w3 = Math.round((t3 + 12)*10)/10;
 
-        <details class="guide-section" id="kz-output"><summary>8. Сақтау, Word, PDF және жоспарды көшіру</summary><div class="guide-content">
-          <ul><li><b>Сақтау</b> — ағымдағы жоспарды осы құрылғыдағы браузерде сақтайды.</li><li><b>Экспорт</b> — жоспардың JSON-файлын жасайды. Ол жоспарды басқа құрылғыға көшіруге немесе резервтік көшірме жасауға арналған.</li><li><b>Импорт</b> — бұрын экспортталған JSON файлын жүктейді.</li><li><b>Word</b> — дайын жоспарды өңдеуге болатын <b>.docx</b> файлына шығарады.</li><li><b>Басып шығару / PDF</b> — жүйелік басып шығару терезесін ашады; сол жерден «PDF ретінде сақтау» таңдауға болады.</li><li><b>Көшіру</b> — оң жақтағы дайын жоспар мәтінін көшіреді.</li></ul>
-          <div class="guide-tip">Маңызды жоспар үшін «Сақтау» мен «Экспортты» бірге қолданған дұрыс: жергілікті сақтау ыңғайлы, ал JSON — резервтік көшірме.</div>
-        </div></details>
+            let aOptionsObj = [
+                { a: `${t3} °C`, isC: true }, { a: `${w1} °C`, isC: false },
+                { a: `${w2} °C`, isC: false }, { a: `${w3} °C`, isC: false }
+            ];
+            shuffleArray(aOptionsObj);
+            let s4CorrectIndex = aOptionsObj.findIndex(o => o.isC);
 
-        <details class="guide-section" id="kz-undo"><summary>9. Ақпаратты кездейсоқ өшіріп алсаңыз</summary><div class="guide-content">
-          <p>Жоғарғы панельдегі <b>↶ Болдырмау</b> және <b>↷ Қайтару</b> батырмаларын пайдаланыңыз. Мәтін өрісінің ішінде әдеттегі <span class="guide-kbd">Ctrl+Z</span> және <span class="guide-kbd">Ctrl+Y</span> тіркесімдері де жұмыс істейді.</p>
-          <p>Қолданба тарихы карточкалар таңдауын, хронология кезеңдерін және басқа соңғы өзгерістерді қайтаруға көмектеседі.</p>
-        </div></details>
+            activeSteps.push({
+                type: 'mcq',
+                title: i18n[currentLang].step4Title,
+                question: i18n[currentLang].step4Q,
+                options: aOptionsObj.map(o => o.a),
+                correct: s4CorrectIndex,
+                solved: false
+            });
 
-        <details class="guide-section" id="kz-faq"><summary>10. Жиі қойылатын сұрақтар</summary><div class="guide-content">
-          <p><b>Интернет керек пе?</b> Жоқ. Негізгі функциялар, көмекші және Word экспорты офлайн жұмыс істейді.</p>
-          <p><b>Көмекші ұсыныстарын өзгертуге бола ма?</b> Иә. Кез келген ұсынысты өшіруге немесе түзетуге болады.</p>
-          <p><b>Жұмыс барысында тілді ауыстыруға бола ма?</b> Иә. Жоспар деректері сақталады, интерфейс РУС/ҚАЗ болып ауысады.</p>
-          <p><b>Неліктен оң жақтағы дайын жоспар өздігінен өзгеріп тұрады?</b> Бұл алдын ала қарау: ол толтырылған деректерден автоматты түрде жиналады.</p>
-          <p><b>Барлық құзыреттерді таңдау керек пе?</b> Жоқ. Оқушы әрекетінде нақты көрінетін құзыреттерді ғана таңдаңыз.</p>
-        </div></details>
-      </div>
-    </div>
-  </div>
-</div>
+            // Set Full Solution Data
+            currentTask = {
+                solutionText: `
+                    <p><b>1. ${currentLang === 'ru' ? "Дано:" : "Берілгені:"}</b></p>
+                    <p>\\( m_1 = ${m1} \\) кг (вода) <br> 
+                       \\( t_1 = ${t1} \\) °C <br> 
+                       \\( c_1 = ${c1} \\) Дж/(кг·°C)</p>
+                    <p>\\( m_2 = ${m2} \\) кг (${uiSubst[metal].toLowerCase()}) <br> 
+                       \\( t_2 = ${t2} \\) °C <br> 
+                       \\( c_2 = ${c2} \\) Дж/(кг·°C)</p>
+                    <p><b>${currentLang === 'ru' ? "Найти:" : "Табу керек:"}</b> \\( t_3 \\)</p>
+                    <hr class="my-3 border-slate-200">
+                    <p><b>2. ${currentLang === 'ru' ? "Уравнение теплового баланса:" : "Жылулық баланс теңдеуі:"}</b></p>
+                    <p>\\( Q_{\\text{пол}} = Q_{\\text{отд}} \\)</p>
+                    <p>Вода получает теплоту: \\( Q_1 = c_1 m_1 (t_3 - t_1) \\)</p>
+                    <p>Металл отдает теплоту: \\( Q_2 = c_2 m_2 (t_2 - t_3) \\)</p>
+                    <p>\\( c_1 m_1 (t_3 - t_1) = c_2 m_2 (t_2 - t_3) \\)</p>
+                    <hr class="my-3 border-slate-200">
+                    <p><b>3. ${currentLang === 'ru' ? "Подстановка и расчет:" : "Орнына қою және есептеу:"}</b></p>
+                    <p>\\( ${c1} \\cdot ${m1} \\cdot (t_3 - ${t1}) = ${c2} \\cdot ${m2} \\cdot (${t2} - t_3) \\)</p>
+                    <p>\\( ${c1*m1}t_3 - ${c1*m1*t1} = ${c2*m2*t2} - ${c2*m2}t_3 \\)</p>
+                    <p>\\( (${c1*m1} + ${c2*m2})t_3 = ${c1*m1*t1} + ${c2*m2*t2} \\)</p>
+                    <p>\\( t_3 = \\frac{${c1*m1*t1 + c2*m2*t2}}{${c1*m1 + c2*m2}} \\approx ${t3} \\text{ °C} \\)</p>
+                `
+            };
 
-<div class="toast" id="toast"></div>
+            renderGuidedSteps();
+        }
 
-<script>
-const I18N={
-ru:{appTitle:'Конструктор урока',subtitle:'офлайн-планировщик для учителя по карточкам SCAFFOLD',save:'Сохранить',export:'Экспорт',import:'Импорт',print:'Печать / PDF',undo:'↶ Отменить',redo:'↷ Вернуть',undone:'Последнее изменение отменено',redone:'Изменение возвращено',nothingUndo:'Больше нечего отменять',nothingRedo:'Больше нечего возвращать',taskCards:'Карточки «Задание»',taskHint:'Сначала задайте рамку урока. Эти поля повторяют логику карточек задания.',duration:'Длительность',goal:'Цель занятия',topic:'Тема',needs:'Потребности учащихся / необходимая поддержка',audience:'Целевая аудитория',place:'Место',baseResources:'Ресурсы',realLife:'Связь с реальной жизнью',goalPh:'Что должны понять/сделать учащиеся?',topicPh:'Тема / раздел программы',needsPh:'Что нужно учащимся для успешного достижения цели?',needsHelp:'Например: повторение базовых понятий, образец, визуализация, пошаговая инструкция, языковая поддержка, работа в паре, дополнительное усложнение для сильных учащихся.',audiencePh:'Класс, группа, число учащихся',placePh:'Кабинет, лаборатория, улица…',resourcesPh:'Оборудование, материалы, люди',lifePh:'Какой реальный контекст будет использован?',planningCards:'7 карточек «Планирование»',planningHint:'Пройдите по шагам слева направо. Приложение проверит, что опора постепенно снимается.',scaffoldControl:'Контроль scaffolding',scaffoldHint:'Проверка не только структуры карточек, но и постепенного перехода от сильной поддержки учителя к самостоятельности ученика.',autoDraft:'Создать черновик хронологии',supportRule:'Логика поддержки: диагностика → модель/пример → совместное выполнение → частичное снятие опор → самостоятельное действие → рефлексия.',preview:'Готовый план',previewHint:'Обновляется автоматически. Можно вывести в Word, печатать или сохранить как PDF.',copy:'Копировать',sourceNote:'Основа — набор карточек и практическое руководство SCAFFOLD ETF/JRC (2024). Автопроверка 7 принципов и модуль постепенного снятия опор служат подсказками для планирования, а не формальной оценкой урока.',selected:'Выбрано',search:'Поиск по карточкам…',next:'Далее',back:'Назад',step1:'Выберите компетенции',step2:'Определите уровень компетенции',step3:'Выберите метод обучения',step4:'Ожидаемые результаты / индикаторы',step5:'Выберите метод оценки',step6:'Сбор ресурсов',step7:'Хронология',s1hint:'Какие компетенции будут развиваться на этом уроке?',s2hint:'Как вы узнаете исходный уровень учащихся до основной деятельности?',s3hint:'Выберите один или несколько способов организации обучения.',s4hint:'Опишите наблюдаемый результат: что ученик сможет сделать и какое доказательство это покажет.',s5hint:'Как будет отслеживаться прогресс и результат?',s6hint:'Есть ли всё необходимое: материалы, оборудование, цифровые средства и люди?',s7hint:'Распределите время и поддержку. Уровень опоры должен снижаться по ходу урока.',initialLevel:'Исходный уровень',diagnosticMethod:'Метод диагностики',baselineNote:'Что показала диагностика / что ожидаете увидеть?',outcome:'Ожидаемый результат',indicator:'Индикаторы успеха / критерии',lessonResources:'Ресурсы для урока',people:'Кого нужно привлечь?',addStage:'Добавить этап',minutes:'мин',support:'опора',teacherStudent:'роль',teacherLead:'учитель ведёт',shared:'совместно',studentLead:'ученик ведёт',timelineActivity:'Деятельность / опора',assessmentEvidence:'Оценивание / доказательство',empty:'не заполнено',methodsAssessment:'Методы оценки',methodsTeaching:'Методы обучения',competencyDigital:'Цифровые компетенции',competencyEntre:'Предпринимательские компетенции',competencySustain:'Компетенции устойчивого развития',competencyPersonal:'Личностные, социальные и «Умение обучаться»',competencyTrans:'Сквозные компетенции',planTitle:'ПЛАН УРОКА ПО SCAFFOLD',taskFrame:'Рамка задания',competencies:'Компетенции',initialAssessment:'Начальная диагностика',teachingMethods:'Методы обучения',expected:'Ожидаемые результаты',assessment:'Оценивание',resources:'Ресурсы',chronology:'Хронология',scaffoldCheck:'Проверка постепенного снятия опоры',good:'выполнено',attention:'нужно дополнить',saved:'Сохранено на этом устройстве',exported:'Файл плана создан',imported:'План импортирован',copied:'План скопирован',reset:'Очистить',confirmReset:'Очистить весь текущий план?',level0:'Не определён',level1:'Низкий / нужна сильная опора',level2:'Базовый / нужна направляющая опора',level3:'Достаточный / частичная опора',level4:'Высокий / преимущественно самостоятельная работа'},
-kz:{appTitle:'Сабақ конструкторы',subtitle:'SCAFFOLD карточкалары бойынша мұғалімге арналған офлайн жоспарлаушы',save:'Сақтау',export:'Экспорт',import:'Импорт',print:'Басып шығару / PDF',undo:'↶ Болдырмау',redo:'↷ Қайтару',undone:'Соңғы өзгеріс болдырылмады',redone:'Өзгеріс қайтарылды',nothingUndo:'Болдырмайтын өзгеріс жоқ',nothingRedo:'Қайтаратын өзгеріс жоқ',taskCards:'«Тапсырма» карточкалары',taskHint:'Алдымен сабақтың шеңберін белгілеңіз. Өрістер тапсырма карточкаларының логикасын қайталайды.',duration:'Ұзақтығы',goal:'Мақсаты',topic:'Тақырыбы',needs:'Оқушылардың қажеттіліктері / қажетті қолдау',audience:'Мақсатты аудитория',place:'Өтетін орны',baseResources:'Ресурстар',realLife:'Шынайы өмірмен байланысы',goalPh:'Оқушы нені түсінуі/орындауы керек?',topicPh:'Тақырып / оқу бағдарламасының бөлімі',needsPh:'Оқушыларға оқу мақсатына сәтті жету үшін не қажет?',needsHelp:'Мысалы: негізгі ұғымдарды қайталау, үлгі, визуализация, қадамдық нұсқаулық, тілдік қолдау, жұппен жұмыс, қабілеті жоғары оқушыларға күрделендірілген тапсырма.',audiencePh:'Сынып, топ, оқушы саны',placePh:'Кабинет, зертхана, сыртқы орта…',resourcesPh:'Құрал-жабдық, материалдар, адамдар',lifePh:'Қандай нақты өмірлік контекст қолданылады?',planningCards:'7 «Жоспарлау» карточкасы',planningHint:'Қадамдарды ретімен орындаңыз. Қосымша қолдаудың біртіндеп азаюын тексереді.',scaffoldControl:'Scaffolding бақылауы',scaffoldHint:'Карточкалар құрылымымен қатар мұғалімнің күшті қолдауынан оқушының дербестігіне біртіндеп көшуді тексеру.',autoDraft:'Хронологияның нобайын жасау',supportRule:'Қолдау логикасы: диагностика → үлгі/мысал → бірлескен орындау → тіректерді біртіндеп азайту → дербес әрекет → рефлексия.',preview:'Дайын жоспар',previewHint:'Автоматты түрде жаңарады. Word-қа шығаруға, басып шығаруға немесе PDF ретінде сақтауға болады.',copy:'Көшіру',sourceNote:'Негізі — ETF/JRC SCAFFOLD карточкалары мен 2024 жылғы практикалық нұсқаулық. 7 қағида бойынша автотексеру және тіректі біртіндеп азайту модулі сабаққа ресми баға емес, жоспарлау кеңесі ретінде беріледі.',selected:'Таңдалды',search:'Карточкалардан іздеу…',next:'Келесі',back:'Артқа',step1:'Құзыреттерді таңдаңыз',step2:'Құзыреттілік деңгейін анықтаңыз',step3:'Оқыту әдісін таңдаңыз',step4:'Нәтижелер / нақты материалдар',step5:'Бағалау әдісін таңдаңыз',step6:'Ресурстарды жинау',step7:'Хронология',s1hint:'Осы сабақта қандай құзыреттер дамытылады?',s2hint:'Негізгі жұмысқа дейін оқушылардың бастапқы деңгейін қалай анықтайсыз?',s3hint:'Оқытуды ұйымдастырудың бір немесе бірнеше әдісін таңдаңыз.',s4hint:'Бақыланатын нәтижені жазыңыз: оқушы не істей алады және оны қандай дәлел көрсетеді?',s5hint:'Ілгерілеу мен нәтиже қалай бағаланады?',s6hint:'Материалдар, құралдар, цифрлық ресурстар және адамдар жеткілікті ме?',s7hint:'Уақыт пен қолдауды бөліңіз. Сабақ барысында тірек біртіндеп азаюы тиіс.',initialLevel:'Бастапқы деңгей',diagnosticMethod:'Диагностика әдісі',baselineNote:'Диагностика нені көрсетті / не күтесіз?',outcome:'Күтілетін нәтиже',indicator:'Жетістік индикаторлары / критерийлер',lessonResources:'Сабақ ресурстары',people:'Кімді тарту керек?',addStage:'Кезең қосу',minutes:'мин',support:'тірек',teacherStudent:'рөл',teacherLead:'мұғалім жетекші',shared:'бірлесіп',studentLead:'оқушы жетекші',timelineActivity:'Әрекет / тірек',assessmentEvidence:'Бағалау / дәлел',empty:'толтырылмаған',methodsAssessment:'Бағалау әдістері',methodsTeaching:'Оқыту әдістері',competencyDigital:'Цифрлық құзыреттер',competencyEntre:'Кәсіпкерлік құзыреттер',competencySustain:'Тұрақты даму саласындағы құзыреттер',competencyPersonal:'Жеке, әлеуметтік және «Оқуды үйрену» құзыреттері',competencyTrans:'Икемді құзыреттер',planTitle:'SCAFFOLD БОЙЫНША САБАҚ ЖОСПАРЫ',taskFrame:'Тапсырма шеңбері',competencies:'Құзыреттер',initialAssessment:'Бастапқы диагностика',teachingMethods:'Оқыту әдістері',expected:'Күтілетін нәтижелер',assessment:'Бағалау',resources:'Ресурстар',chronology:'Хронология',scaffoldCheck:'Тіректі біртіндеп азайтуды тексеру',good:'орындалды',attention:'толықтыру керек',saved:'Осы құрылғыда сақталды',exported:'Жоспар файлы жасалды',imported:'Жоспар импортталды',copied:'Жоспар көшірілді',reset:'Тазарту',confirmReset:'Ағымдағы жоспарды толық тазарту керек пе?',level0:'Анықталмаған',level1:'Төмен / күшті тірек қажет',level2:'Базалық / бағыттаушы тірек қажет',level3:'Жеткілікті / ішінара тірек',level4:'Жоғары / негізінен дербес жұмыс'}
-};
+        function renderGuidedSteps() {
+            const container = document.getElementById('guided-steps-container');
+            container.innerHTML = '';
+            const stepWord = i18n[currentLang].stepPrompt;
 
-Object.assign(I18N.ru,{selectionWays:'Как выбрать компетенции',byCompetency:'По конкретной компетенции',byCross:'По сквозной компетенции',randomIdea:'Случайная идея',crossGuide:'7 сквозных компетенций — навигатор по карточкам',crossHint:'Нажмите на одну из семи компетенций: связанные карточки из четырёх рамок будут выделены.',minThree:'Руководство рекомендует начать как минимум с трёх компетенций из основных рамок.',threeReady:'Выбрано три или больше основных компетенций.',related:'Рекомендуемые связи из поля «Интеграция с другими компетенциями»',addRelated:'Добавить',noCompetencies:'Сначала выберите хотя бы одну компетенцию.',diagPerComp:'Определите исходный уровень отдельно для каждой выбранной компетенции.',diagNotePh:'Что показала диагностика / что ожидаете увидеть?',evidenceProduct:'Продукт / доказательство обучения',evidencePh:'Что конкретно представит или выполнит ученик?',howTo:'Как провести',qualityTitle:'Проверка по 7 принципам SCAFFOLD',qualityHint:'Автоподсказка по принципам руководства 2024. Это не оценка качества урока, а напоминание при планировании.',qualityNote:'Подсказки формируются по заполненному плану. Учитель принимает окончательное методическое решение.',reflected:'отражено',randomPicked:'Случайная карточка добавлена',clearFilter:'Сбросить фильтр'});
-Object.assign(I18N.kz,{selectionWays:'Құзыреттерді қалай таңдауға болады',byCompetency:'Нақты құзырет бойынша',byCross:'Сквозной құзырет бойынша',randomIdea:'Кездейсоқ идея',crossGuide:'7 сквозной құзырет — карточкалар бойынша навигатор',crossHint:'Жеті құзыреттің бірін басыңыз: төрт шеңбердегі байланысты карточкалар белгіленеді.',minThree:'Нұсқаулық негізгі шеңберлерден кемінде үш құзыреттен бастауды ұсынады.',threeReady:'Үш немесе одан да көп негізгі құзырет таңдалды.',related:'«Басқа құзыреттермен кірігу» өрісіндегі ұсынылатын байланыстар',addRelated:'Қосу',noCompetencies:'Алдымен кемінде бір құзыретті таңдаңыз.',diagPerComp:'Әр таңдалған құзырет үшін бастапқы деңгейді бөлек анықтаңыз.',diagNotePh:'Диагностика нені көрсетті / не күтесіз?',evidenceProduct:'Оқу өнімі / дәлелі',evidencePh:'Оқушы нақты нені ұсынады немесе орындайды?',howTo:'Қалай өткізуге болады',qualityTitle:'SCAFFOLD-тың 7 қағидасы бойынша тексеру',qualityHint:'2024 жылғы нұсқаулық қағидалары бойынша автоматты еске салғыш. Бұл сабақ сапасының бағасы емес.',qualityNote:'Кеңестер толтырылған жоспарға сүйеніп жасалады. Соңғы әдістемелік шешімді мұғалім қабылдайды.',reflected:'қамтылған',randomPicked:'Кездейсоқ карточка қосылды',clearFilter:'Сүзгіні тазарту'});
-Object.assign(I18N.ru,{word:'Word',wordCreated:'Документ Word создан'});
-Object.assign(I18N.ru,{guideBtn:'❓ Инструкция'});
-Object.assign(I18N.kz,{word:'Word',wordCreated:'Word құжаты жасалды'});
-Object.assign(I18N.kz,{guideBtn:'❓ Нұсқаулық'});
+            activeSteps.forEach((step, index) => {
+                if (index > currentStepIndex) return; 
 
+                const stepDiv = document.createElement('div');
+                stepDiv.className = `bg-white rounded-xl shadow-sm border p-4 sm:p-6 fade-in transition-all ${index === currentStepIndex ? 'border-indigo-400 ring-2 ring-indigo-50' : 'border-slate-200 opacity-90'}`;
 
+                let html = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4 pb-3 border-b border-slate-100 gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold uppercase tracking-wider px-2 py-1 bg-indigo-100 text-indigo-700 rounded-md whitespace-nowrap">${stepWord} ${index + 1} / ${activeSteps.length}</span>
+                            <span class="font-bold text-slate-800 text-base sm:text-lg">${step.title}</span>
+                        </div>
+                        ${step.solved ? '<span class="text-xs font-bold text-emerald-600 flex items-center gap-1.5 bg-emerald-50 px-2 py-1.5 rounded-md"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg> ' + (currentLang==='ru'?'Выполнено':'Орындалды') + '</span>' : ''}
+                    </div>
+                    <p class="text-slate-600 font-medium mb-4 sm:mb-5 text-sm sm:text-base">${step.question}</p>
+                `;
 
-Object.assign(I18N.ru,{
- assistantJump:'✨ Помощник',assistantTitle:'Умный помощник',assistantHint:'Анализирует тему, цель и формат урока и предлагает варианты по логике карточек SCAFFOLD. Окончательное решение остаётся за учителем.',assistantOffline:'работает офлайн',assistantSubject:'Предмет',assistantLessonType:'Тип урока',assistantFocus:'Методический акцент',assistantAnalyze:'✦ Подобрать рекомендации',assistantApplyAll:'Применить всё',assistantApplyComp:'Только компетенции',assistantApplyTimeline:'Только хронологию',assistantNote:'Помощник использует офлайн-правила, связи компетенций и методы из карточек SCAFFOLD. Он не заменяет методическое решение учителя. Заполненные поля результата, доказательства и критериев не перезаписываются при «Применить всё».',assistantEmpty:'Заполните тему и/или цель урока, выберите предмет и нажмите «Подобрать рекомендации».',assistantCore:'Рекомендуемые компетенции',assistantCross:'Сквозные акценты',assistantMethods:'Методы обучения',assistantAssessment:'Оценивание',assistantResultTitle:'Результат и доказательство',assistantOutcome:'Предлагаемый результат',assistantEvidence:'Продукт / доказательство',assistantCriteria:'Критерии успеха',assistantLife:'Связь с реальной жизнью',assistantResources:'Ресурсы',assistantTimeline:'Предлагаемая хронология',assistantWhy:'Почему',assistantApplied:'Рекомендации применены. При необходимости используйте «Отменить».',assistantCompApplied:'Компетенции добавлены.',assistantTimelineApplied:'Хронология заменена рекомендацией помощника.',assistantNeedInput:'Добавьте тему или цель урока.',assistantGenerated:'Рекомендации сформированы. Проверьте их перед применением.',assistantCurrentInput:'Основано на текущих полях урока',assistantSubjectWord:'Предмет'
-});
-Object.assign(I18N.kz,{
- assistantJump:'✨ Көмекші',assistantTitle:'Ақылды көмекші',assistantHint:'Сабақтың тақырыбын, мақсатын және форматын талдап, SCAFFOLD карточкаларының логикасы бойынша нұсқалар ұсынады. Соңғы шешімді мұғалім қабылдайды.',assistantOffline:'офлайн жұмыс істейді',assistantSubject:'Пән',assistantLessonType:'Сабақ түрі',assistantFocus:'Әдістемелік басымдық',assistantAnalyze:'✦ Ұсыныстарды таңдау',assistantApplyAll:'Барлығын қолдану',assistantApplyComp:'Тек құзыреттер',assistantApplyTimeline:'Тек хронология',assistantNote:'Көмекші SCAFFOLD карточкаларындағы офлайн ережелерді, құзыреттер байланысын және оқыту әдістерін пайдаланады. Ол мұғалімнің әдістемелік шешімін алмастырмайды. «Барлығын қолдану» кезінде толтырылған нәтиже, дәлел және критерий өрістері қайта жазылмайды.',assistantEmpty:'Тақырыпты және/немесе сабақ мақсатын толтырып, пәнді таңдаңыз да «Ұсыныстарды таңдау» түймесін басыңыз.',assistantCore:'Ұсынылатын құзыреттер',assistantCross:'Көлденең құзыреттер акценті',assistantMethods:'Оқыту әдістері',assistantAssessment:'Бағалау',assistantResultTitle:'Нәтиже және дәлел',assistantOutcome:'Ұсынылатын нәтиже',assistantEvidence:'Өнім / дәлел',assistantCriteria:'Жетістік критерийлері',assistantLife:'Шынайы өмірмен байланыс',assistantResources:'Ресурстар',assistantTimeline:'Ұсынылатын хронология',assistantWhy:'Неге',assistantApplied:'Ұсыныстар қолданылды. Қажет болса «Болдырмау» пәрменін пайдаланыңыз.',assistantCompApplied:'Құзыреттер қосылды.',assistantTimelineApplied:'Хронология көмекші ұсынған нұсқамен ауыстырылды.',assistantNeedInput:'Сабақ тақырыбын немесе мақсатын қосыңыз.',assistantGenerated:'Ұсыныстар жасалды. Қолданар алдында тексеріңіз.',assistantCurrentInput:'Сабақтың ағымдағы өрістеріне негізделген',assistantSubjectWord:'Пән'
-});
+                if (step.type === 'checkbox') {
+                    html += `<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-5">`;
+                    step.options.forEach((opt, idx) => {
+                        let isChecked = step.userSelections && step.userSelections.includes(idx) ? 'checked' : '';
+                        let disabled = step.solved ? 'disabled' : '';
+                        let labelClass = "flex items-start gap-3 p-3 border border-slate-200 rounded-lg hover:bg-indigo-50/50 cursor-pointer";
+                        
+                        if (step.solved) {
+                            labelClass = step.correct.includes(idx)
+                                ? "flex items-start gap-3 p-3 border-2 border-emerald-400 bg-emerald-50 rounded-lg opacity-90 cursor-default"
+                                : "flex items-start gap-3 p-3 border border-slate-200 bg-slate-50 opacity-40 cursor-default";
+                        }
+                        
+                        html += `<label class="${labelClass}">
+                            <input type="checkbox" id="step${index}_cb${idx}" value="${idx}" class="mt-0.5 w-6 h-6 sm:w-5 sm:h-5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 flex-shrink-0" ${isChecked} ${disabled}>
+                            <span class="text-slate-700 font-medium leading-tight text-sm">${opt}</span>
+                        </label>`;
+                    });
+                    html += `</div>`;
+                    if (!step.solved) {
+                        html += `<button onclick="checkStepCB(${index})" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-lg shadow-sm transition-all focus:ring-4 focus:ring-indigo-100 active:scale-95 text-base">${i18n[currentLang].checkBtn}</button>`;
+                    }
+                } 
+                else if (step.type === 'match') {
+                    html += `<div class="flex flex-col gap-2 mb-4">`;
+                    step.items.forEach((item, itemIdx) => {
+                        let selectClass = step.solved ? "border-emerald-400 bg-emerald-50 text-emerald-800 font-bold" : "border-slate-300 bg-slate-50";
+                        html += `<div class="flex items-center justify-between border border-slate-100 p-3 rounded-lg bg-white gap-3">
+                            <span class="font-bold text-slate-800 text-sm sm:text-base w-1/2">${item}</span>
+                            <div class="flex items-center gap-2 w-1/2">
+                                <span class="text-slate-400 font-light hidden sm:block">=</span>
+                                <select id="step${index}_sel${itemIdx}" class="w-full p-2.5 rounded-lg border shadow-sm outline-none text-sm ${selectClass}" ${step.solved ? 'disabled' : ''}>
+                                    <option value="">${i18n[currentLang].selectOption}</option>`;
+                        step.options.forEach((opt, optIdx) => {
+                            let selected = (step.userSelections && step.userSelections[itemIdx] == optIdx) ? 'selected' : '';
+                            html += `<option value="${optIdx}" ${selected}>${opt}</option>`;
+                        });
+                        html += `</select></div></div>`;
+                    });
+                    html += `</div>`;
+                    if (!step.solved) {
+                        html += `<button onclick="checkStepMatch(${index})" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-6 py-3 rounded-lg shadow-sm transition-all active:scale-95 text-base">${i18n[currentLang].checkBtn}</button>`;
+                    }
+                } 
+                else if (step.type === 'mcq') {
+                    html += `<div class="grid grid-cols-1 ${index === 2 ? 'sm:grid-cols-1' : 'sm:grid-cols-2'} gap-3">`;
+                    step.options.forEach((opt, optIdx) => {
+                        let btnClass = "border border-slate-200 hover:border-indigo-400 hover:bg-indigo-50/50 text-slate-700 p-3 sm:p-4 rounded-lg text-sm sm:text-base text-left font-medium transition-all shadow-sm bg-white active:scale-95";
+                        let disabledAttr = "";
 
-const ASSISTANT_OPTIONS={
- subjects:[
-  {v:'physics',ru:'Физика',kz:'Физика'},{v:'math',ru:'Математика / алгебра / геометрия',kz:'Математика / алгебра / геометрия'},{v:'chemistry',ru:'Химия',kz:'Химия'},{v:'biology',ru:'Биология',kz:'Биология'},{v:'geography',ru:'География / естествознание',kz:'География / жаратылыстану'},{v:'informatics',ru:'Информатика',kz:'Информатика'},{v:'other',ru:'Другой предмет',kz:'Басқа пән'}
- ],
- types:[
-  {v:'new',ru:'Изучение новой темы',kz:'Жаңа тақырыпты меңгеру'},{v:'practice',ru:'Практика / решение задач',kz:'Практика / есеп шығару'},{v:'lab',ru:'Исследование / лабораторная работа',kz:'Зерттеу / зертханалық жұмыс'},{v:'project',ru:'Проект / создание продукта',kz:'Жоба / өнім жасау'},{v:'review',ru:'Повторение / систематизация',kz:'Қайталау / жүйелеу'},{v:'assessment',ru:'Проверка / оценивание',kz:'Тексеру / бағалау'}
- ],
- focuses:[
-  {v:'balanced',ru:'Сбалансированно',kz:'Теңгерімді'},{v:'inquiry',ru:'Исследование / IBL',kz:'Зерттеу / IBL'},{v:'functional',ru:'Функциональная грамотность',kz:'Функционалдық сауаттылық'},{v:'collaboration',ru:'Сотрудничество',kz:'Ынтымақтастық'},{v:'digital',ru:'Цифровые навыки',kz:'Цифрлық дағдылар'},{v:'sustain',ru:'Устойчивое развитие',kz:'Тұрақты даму'},{v:'creativity',ru:'Креативность',kz:'Шығармашылық'}
- ]
-};
+                        if (step.solved) {
+                            disabledAttr = "disabled";
+                            if (optIdx === step.correct) {
+                                btnClass = "border-2 border-emerald-400 bg-emerald-50 text-emerald-800 p-3 sm:p-4 rounded-lg text-sm sm:text-base text-left font-bold shadow-sm";
+                            } else {
+                                btnClass = "border border-slate-100 bg-slate-50 text-slate-400 opacity-50 p-3 sm:p-4 rounded-lg text-sm sm:text-base text-left";
+                            }
+                        }
+                        html += `<button onclick="checkStepMCQ(${index}, ${optIdx})" ${disabledAttr} class="${btnClass}"><div class="math-scroll">${opt}</div></button>`;
+                    });
+                    html += `</div>`;
+                }
 
-const assessmentMethods=[
- {ru:'Обратная связь от сверстников',kz:'Құрдастардың кері байланысы',descRu:'Учащиеся дают друг другу конструктивную обратную связь и определяют следующие шаги.',descKz:'Оқушылар бір-біріне сындарлы кері байланыс беріп, келесі қадамдарды анықтайды.'},
- {ru:'Самоанализ',kz:'Өзін-өзі тексеру',descRu:'Ученик сопоставляет свою работу с критериями и доказательствами.',descKz:'Оқушы өз жұмысын критерийлермен және дәлелдермен салыстырады.'},
- {ru:'Формирование оценочных данных',kz:'Бағалау деректерін қалыптастыру',descRu:'Сбор доказательств компетентности в разных форматах.',descKz:'Құзыреттіліктің дәлелдерін әртүрлі форматта жинау.'},
- {ru:'Аутентичная оценка',kz:'Шынайы бағалау',descRu:'Оценивание через значимую реальную ситуацию или применение.',descKz:'Маңызды шынайы жағдай немесе қолдану арқылы бағалау.'},
- {ru:'Автоматизированная оценка',kz:'Автоматтандырылған бағалау',descRu:'Цифровая проверка с оперативной обратной связью.',descKz:'Жедел кері байланысы бар цифрлық бағалау.'},
- {ru:'Наблюдение',kz:'Бақылау',descRu:'Учитель фиксирует действия, прогресс, сильные стороны и потребности.',descKz:'Мұғалім әрекетті, ілгерілеуді, күшті тұстар мен қажеттіліктерді бақылайды.'},
- {ru:'Учебные вопросы',kz:'Зерттеуге арналған сұрақтар',descRu:'Последовательность открытых и усложняющихся вопросов для выявления понимания.',descKz:'Түсінуді анықтайтын ашық және біртіндеп күрделенетін сұрақтар.'}
-];
-const teachingMethods=[
- {ru:'Проектно-ориентированное обучение',kz:'Жобаға бағытталған оқыту',descRu:'Реальная проблема → исследование → продукт → доработка → рефлексия.',descKz:'Нақты мәселе → зерттеу → өнім → жетілдіру → рефлексия.'},
- {ru:'Личностно-ориентированное обучение',kz:'Тұлғаға бағытталған оқыту',descRu:'Опора на интересы, опыт, цели и индивидуальные способы обучения.',descKz:'Қызығушылыққа, тәжірибеге, мақсатқа және жеке оқу тәсілдеріне сүйену.'},
- {ru:'Педагогика создания ценностей',kz:'Құндылыққа негізделген педагогика',descRu:'Ученик создаёт ценность для реального человека, группы или сообщества.',descKz:'Оқушы нақты адамға, топқа немесе қауымға құндылық жасайды.'},
- {ru:'Обучение в сотрудничестве',kz:'Ынтымақтастықта оқыту',descRu:'Групповые цели, совместное решение и взаимное обучение.',descKz:'Топтық мақсаттар, бірлескен шешім және өзара оқыту.'},
- {ru:'Обучение в игровой форме',kz:'Ойын арқылы оқыту',descRu:'Безопасная проба, ошибки, вовлечение и учебная цель в игровом формате.',descKz:'Қауіпсіз сынақ, қателерден үйрену, қатысу және ойын ішіндегі оқу мақсаты.'},
- {ru:'Лабораторный метод обучения',kz:'Оқытудың зертханалық әдісі',descRu:'Практический эксперимент, проба, документирование и анализ опыта.',descKz:'Практикалық эксперимент, сынау, тіркеу және тәжірибені талдау.'},
- {ru:'Сервисное обучение',kz:'Қоғамдық қызмет элементтерімен практикалық оқыту',descRu:'Действие для реальной потребности местного сообщества и обратная связь от него.',descKz:'Жергілікті қауымның нақты қажеттілігі үшін әрекет және одан кері байланыс.'}
-];
+                stepDiv.innerHTML = html;
+                container.appendChild(stepDiv);
+            });
+            
+            renderMath();
+            
+            // Scroll to the active step if it's not the first one
+            if (currentStepIndex > 0 && currentStepIndex < activeSteps.length) {
+                setTimeout(() => {
+                    container.lastElementChild.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            }
+        }
 
-function mk(code,ru,kz){return {code,ru,kz}}
-const competencies={
- digital:[
- mk('d.1','Поиск информации и цифрового контента','Ақпарат пен сандық мазмұнды іздеу'),mk('d.2','Оценка цифрового контента','Сандық мазмұнды бағалау'),mk('d.3','Управление цифровым контентом','Сандық мазмұнды басқару'),mk('d.4','Взаимодействие с помощью цифровых технологий','Цифрлық технологиялар арқылы әрекеттесу'),mk('d.5','Обмен информацией с помощью цифровых технологий','Цифрлық технологиялар арқылы ақпарат алмасу'),mk('d.6','Вовлечение в общественную жизнь с помощью цифровых технологий','Цифрлық технологиялар арқылы қоғамдық өмірге тарту'),mk('d.7','Сотрудничество в цифровом формате','Сандық форматтағы ынтымақтастық'),mk('d.8','Сетевой этикет','Желілік этикет'),mk('d.9','Управление цифровой идентичностью','Сандық сәйкестікті басқару'),mk('d.10','Разработка цифрового контента','Сандық мазмұнды құрастыру'),mk('d.11','Переработка цифрового контента','Сандық мазмұнды қайта өңдеу'),mk('d.12','Авторское право и лицензии','Авторлық құқық және лицензия'),mk('d.13','Программирование','Бағдарламалау'),mk('d.14','Защита устройств','Құрылғыларды қорғау'),mk('d.15','Защита персональных данных','Дербес деректерді қорғау'),mk('d.16','Защита здоровья и благополучия','Денсаулық пен әл-ауқатты қорғау'),mk('d.17','Защита окружающей среды','Қоршаған ортаны қорғау'),mk('d.18','Решение технических проблем','Техникалық мәселелерді шешу'),mk('d.19','Определение потребностей и технологических решений','Қажеттіліктер мен технологиялық шешімдерді анықтау'),mk('d.20','Креативное использование цифровых технологий','Цифрлық технологияларды креативті қолдану'),mk('d.21','Выявление пробелов в цифровых компетенциях','Цифрлық құзыреттердегі олқылықтарды анықтау')],
- entre:[mk('e.1','Выявление возможностей','Мүмкіндіктерді анықтау'),mk('e.2','Креативность','Шығармашылық'),mk('e.3','Видение','Болжау'),mk('e.4','Оценка идей','Идеяларды бағалау'),mk('e.5','Этическое и устойчивое мышление','Этикалық және тұрақты ойлау'),mk('e.6','Самосознание и самоэффективность','Өзін-өзі тану және өзіндік тиімділік'),mk('e.7','Мотивация и упорство','Мотивация және табандылық'),mk('e.8','Мобилизация ресурсов','Ресурстарды жұмылдыру'),mk('e.9','Финансовая и экономическая грамотность','Қаржылық және экономикалық сауаттылық'),mk('e.10','Мобилизация других людей','Басқа адамдарды жұмылдыру'),mk('e.11','Проявление инициативы','Бастамашылық таныту'),mk('e.12','Планирование и управление','Жоспарлау және басқару'),mk('e.13','Работа с неопределённостью, неоднозначностью и риском','Белгісіз, түсініксіз заттармен және тәуекелмен жұмыс істеу'),mk('e.14','Работа с другими людьми','Басқа адамдармен жұмыс'),mk('e.15','Обучение через опыт','Тәжірибе арқылы білім алу')],
- sustain:[mk('g.1','Оценка устойчивости','Тұрақтылықты бағалау'),mk('g.2','Поддержка справедливости','Әділеттілікті қолдау'),mk('g.3','Охрана природы','Табиғатты қорғау'),mk('g.4','Системное мышление','Жүйелі ойлау'),mk('g.5','Критическое мышление','Сыни тұрғыдан ойлау'),mk('g.6','Постановка проблемы','Мәселе тудыру'),mk('g.7','Грамотность в отношении будущего','Болашақты болжау сауаттылығы'),mk('g.8','Адаптивность','Бейімделу'),mk('g.9','Исследовательское мышление','Зерттеушілік ойлау'),mk('g.10','Политическая активность','Саяси белсенділік'),mk('g.11','Коллективные действия','Ұжымдық әрекеттер'),mk('g.12','Индивидуальная инициатива','Жеке бастама')],
- personal:[mk('l.1','Саморегуляция','Өзін-өзі реттеу'),mk('l.2','Гибкость','Икемділік'),mk('l.3','Благополучие','Әл-ауқат'),mk('l.4','Эмпатия','Эмпатия'),mk('l.5','Коммуникация','Байланыс'),mk('l.6','Сотрудничество','Ынтымақтастық'),mk('l.7','Мышление роста','Ой-өріс кеңдігі'),mk('l.8','Критическое мышление','Сыни тұрғыдан ойлау'),mk('l.9','Управление обучением','Оқуды басқару')],
- trans:[mk('t.1','Критическое мышление','Сыни тұрғыдан ойлау'),mk('t.2','Решение проблем','Мәселелерді шешу'),mk('t.3','Работа в команде','Командада жұмыс істеу'),mk('t.4','Навыки коммуникации и переговоров','Келіссөздер жүргізу дағдылары'),mk('t.5','Аналитические навыки','Аналитикалық дағдылар'),mk('t.6','Креативность','Шығармашылық'),mk('t.7','Навыки межкультурного общения','Мәдениетаралық қарым-қатынас дағдылары')]
-};
+        function checkStepCB(index) {
+            const step = activeSteps[index];
+            let userSels = [];
+            step.options.forEach((_, idx) => {
+                if (document.getElementById(`step${index}_cb${idx}`).checked) userSels.push(idx);
+            });
+            
+            const isCorrect = userSels.length === step.correct.length && userSels.every(v => step.correct.includes(v));
+            
+            if (isCorrect) {
+                showToast(i18n[currentLang].correctMsg, 'success');
+                step.solved = true;
+                step.userSelections = userSels;
+                currentStepIndex++;
+                renderGuidedSteps();
+            } else {
+                showToast(i18n[currentLang].incorrectMsg, 'error');
+            }
+        }
 
+        function checkStepMatch(index) {
+            const step = activeSteps[index];
+            let userSels = [];
+            let allFilled = true;
+            
+            step.items.forEach((_, idx) => {
+                let val = document.getElementById(`step${index}_sel${idx}`).value;
+                if (val === "") allFilled = false;
+                userSels.push(parseInt(val));
+            });
 
-const METHOD_STEPS=[
- {ru:['Сформулируйте реальную проблему, вопрос или задачу.','Составьте последовательность заданий для исследования.','Сгенерируйте и оцените идеи.','Создайте продукт, протестируйте и доработайте его.','Проведите рефлексию и подведите итоги.'],kz:['Нақты мәселені, сұрақты немесе міндетті тұжырымдаңыз.','Зерттеуге арналған тапсырмалар ретін құрыңыз.','Идеялар ұсыныңыз және бағалаңыз.','Өнім жасап, сынап, жетілдіріңіз.','Рефлексия жасап, қорытындылаңыз.']},
- {ru:['Определите темы или проблемы, значимые для обучающихся.','Позвольте выбрать предпочтительные способы обучения и оценки.','Определите личные цели развития компетенций.','Согласуйте способы применения и оценки компетенций.','Свяжите компетенции с разными целями и контекстами.'],kz:['Оқушылар үшін маңызды тақырыптар мен мәселелерді анықтаңыз.','Оқу және бағалау тәсілдерін таңдауға мүмкіндік беріңіз.','Құзыреттерді дамыту бойынша жеке мақсаттарды белгілеңіз.','Құзыреттерді қолдану және бағалау тәсілдерін келісіңіз.','Құзыреттерді әртүрлі мақсаттармен және контекстермен байланыстырыңыз.']},
- {ru:['Определите, кому может быть полезно обучение.','Найдите возможность создать ценность для других.','Спланируйте и выполните действие по созданию ценности.','Получите обратную связь от тех, для кого создаётся ценность.','Проанализируйте полученный опыт.'],kz:['Оқудың кімге пайдалы болатынын анықтаңыз.','Басқалар үшін құндылық жасау мүмкіндігін табыңыз.','Құндылық жасау әрекетін жоспарлап, орындаңыз.','Құндылық арналған адамдардан кері байланыс алыңыз.','Жинақталған тәжірибені талдаңыз.']},
- {ru:['Организуйте работу в группах.','Определите индивидуальные и групповые цели.','Создавайте решения совместно.','Согласуйте критерии успеха и общие ожидания.','Дайте обучающимся возможность обучать друг друга.'],kz:['Топтық жұмысты ұйымдастырыңыз.','Жеке және топтық мақсаттарды анықтаңыз.','Шешімдерді бірлесіп жасаңыз.','Жетістік критерийлері мен ортақ күтулерді келісіңіз.','Оқушыларға бір-бірін оқытуға мүмкіндік беріңіз.']},
- {ru:['Создайте безопасное пространство для ошибок.','Организуйте игровую деятельность с учебной целью.','Сделайте цель игры понятной обучающимся.','Поддерживайте активное и эмоциональное вовлечение.','Используйте игру для нового взгляда на проблему и будущее.'],kz:['Қателесуге қауіпсіз орта жасаңыз.','Оқу мақсаты бар ойын әрекетін ұйымдастырыңыз.','Ойын мақсатын оқушыларға түсінікті етіңіз.','Белсенді және эмоциялық қатысуды қолдаңыз.','Мәселеге және болашаққа жаңаша қарау үшін ойынды пайдаланыңыз.']},
- {ru:['Организуйте эксперимент с доступными ресурсами.','Дайте возможность учиться через создание и пробу.','Используйте ошибки как источник обучения.','Документируйте ход практической работы.','Проанализируйте опыт и результаты.'],kz:['Қолжетімді ресурстармен эксперимент ұйымдастырыңыз.','Жасау және сынау арқылы үйренуге мүмкіндік беріңіз.','Қателерді оқу көзі ретінде пайдаланыңыз.','Практикалық жұмыстың барысын тіркеңіз.','Тәжірибе мен нәтижелерді талдаңыз.']},
- {ru:['Определите реальную потребность местного сообщества.','Исследуйте возможности создать для него ценность.','Предпримите конкретное действие.','Получите обратную связь от сообщества или бенефициаров.','Покажите результаты и отрефлексируйте прогресс.'],kz:['Жергілікті қауымның нақты қажеттілігін анықтаңыз.','Ол үшін құндылық жасау мүмкіндіктерін зерттеңіз.','Нақты әрекет жасаңыз.','Қауымнан немесе бенефициарлардан кері байланыс алыңыз.','Нәтижені көрсетіп, ілгерілеуге рефлексия жасаңыз.']}
-];
-const COMP_LINKS={"d.1":["e.1","g.5"],"d.2":["g.5"],"d.3":["e.12"],"d.4":["e.14","g.11","l.5","l.6"],"d.5":["e.14"],"d.6":["g.10","g.11","g.12"],"d.7":["e.8","e.14","g.11","l.6"],"d.8":["l.1","l.5","l.6"],"d.9":["l.1","l.3"],"d.10":["e.2"],"d.11":["e.1","e.2"],"d.12":["e.4"],"d.13":["e.2","g.6","g.9"],"d.14":["e.12","l.8"],"d.15":["l.3","l.8"],"d.16":["g.3","l.3","l.8"],"d.17":["g.3"],"d.18":["g.6"],"d.19":["e.1","e.2","g.6","g.9"],"d.20":["e.1","e.2","g.6","g.9"],"d.21":["e.6","e.15","l.9"],"e.1":["d.1","d.11","d.19","d.20","g.4","g.5","g.6","g.10","l.8"],"e.2":["d.10","d.11","d.13","d.19","d.20","g.4","g.5","g.6","g.9"],"e.3":["l.2","g.7","g.9","g.10"],"e.4":["d.12","g.5"],"e.5":["g.1","g.2","g.3","g.4","l.3"],"e.6":["d.21","g.12","l.1","l.7"],"e.7":["l.1","l.7"],"e.8":["d.7"],"e.9":["g.1","g.2","g.3","l.3"],"e.10":["l.5","g.11","g.10"],"e.11":["g.10","g.11","g.12"],"e.12":["d.3","d.14","g.7","g.8","l.2"],"e.13":["g.8","l.2"],"e.14":["d.4","d.5","d.7","g.11","l.4","l.6"],"e.15":["l.7","l.8","l.9","d.21"],"g.1":["e.5","e.9","l.1","l.3","l.4"],"g.2":["e.5","e.9","l.4"],"g.3":["d.16","d.17","e.5","e.9","l.3","l.4"],"g.4":["e.1","e.2","e.5","l.8"],"g.5":["l.8","d.1","d.2","e.1","e.2","e.4"],"g.6":["d.13","d.18","d.19","d.20","e.1","e.2","l.8"],"g.7":["e.3","e.12"],"g.8":["e.12","e.13","l.2"],"g.9":["d.13","d.19","d.20","e.2","e.3"],"g.10":["d.6","e.1","e.3","e.10","e.11","l.1"],"g.11":["d.4","d.6","d.7","e.10","e.11","e.14","l.6"],"g.12":["d.6","e.6","e.11","l.1"],"l.1":["d.8","d.9","e.6","e.7","g.1","g.10","g.12"],"l.2":["e.3","e.12","e.13","g.8"],"l.3":["d.9","d.15","d.16","e.5","e.9","g.1","g.3"],"l.4":["e.14","g.1","g.2","g.3"],"l.5":["d.4","d.8","e.10"],"l.6":["d.4","d.7","d.8","e.14","g.11"],"l.7":["e.6","e.7","e.15"],"l.8":["d.14","d.15","d.16","e.1","e.15","g.4","g.5","g.6"],"l.9":["d.21","e.15"]};
-const COMP_TAGS={"d.1":["t.1"],"d.2":["t.1","t.5"],"d.3":["t.2"],"d.4":["t.3","t.4"],"d.5":["t.4"],"d.6":["t.6","t.7"],"d.7":["t.4"],"d.8":["t.3","t.4","t.7"],"d.9":[],"d.10":["t.6"],"d.11":["t.2"],"d.12":[],"d.13":["t.2"],"d.14":["t.1"],"d.15":["t.1"],"d.16":["t.1","t.5"],"d.17":["t.1"],"d.18":["t.1","t.5","t.6"],"d.19":["t.2"],"d.20":["t.2","t.5","t.6"],"d.21":[],"e.1":["t.1"],"e.2":["t.2","t.6"],"e.3":["t.6"],"e.4":["t.1"],"e.5":["t.1"],"e.6":[],"e.7":[],"e.8":[],"e.9":[],"e.10":["t.4"],"e.11":["t.2"],"e.12":["t.1"],"e.13":[],"e.14":["t.3"],"e.15":["t.1"],"g.1":["t.1"],"g.2":["t.7"],"g.3":[],"g.4":["t.1","t.5","t.7"],"g.5":["t.1"],"g.6":["t.2"],"g.7":["t.2"],"g.8":[],"g.9":["t.6"],"g.10":[],"g.11":["t.3"],"g.12":["t.4"],"l.1":[],"l.2":[],"l.3":[],"l.4":["t.7"],"l.5":["t.4"],"l.6":["t.3","t.4"],"l.7":["t.1"],"l.8":["t.1","t.2","t.5","t.6","t.7"],"l.9":["t.1"]};
+            if (!allFilled) {
+                showToast(currentLang === 'ru' ? "Заполните все поля!" : "Барлық өрістерді толтырыңыз!", 'error');
+                return;
+            }
 
-const QUALITY_PRINCIPLES={
- ru:['Вовлекайте обучающихся в реальный учебный процесс','Используйте рефлексию, чтобы обучающиеся понимали, как они учатся и управляют обучением','Поставьте обучающегося в центр обучения','Переключите внимание с преподавания предмета на содействие обучению','Откройте процесс обучения для общества и вовлекайте других','Включите триггеры для эмоционального обучения','Оценивайте прогресс разными методами и делайте его наглядным'],
- kz:['Оқушыларды шынайы оқу үдерісіне тартыңыз','Рефлексия арқылы оқушылардың қалай оқитынын және оқуын қалай басқаратынын түсінуін жетілдіріңіз','Оқушыны оқу үдерісінің орталығына қойыңыз','Пәнді оқытудан оқуға жәрдемдесуге назар аударыңыз','Оқу үдерісін қоғамға ашып, басқаларды тартыңыз','Эмоциялық оқыту триггерлерін қосыңыз','Ілгерілеуді әртүрлі әдістермен бағалап, оны көрнекі етіңіз']
-};
+            const isCorrect = userSels.every((v, i) => v === step.correct[i]);
+            if (isCorrect) {
+                showToast(i18n[currentLang].correctMsg, 'success');
+                step.solved = true;
+                step.userSelections = userSels;
+                currentStepIndex++;
+                renderGuidedSteps();
+            } else {
+                showToast(i18n[currentLang].incorrectMsg, 'error');
+            }
+        }
 
-const state={lang:'ru',step:1,selectedCompetencies:[],initialLevel:'',diagnostic:'',baseline:'',competencyDiagnostics:{},selectionMode:'competency',crossFilter:'',selectedTeaching:[],outcome:'',evidence:'',indicator:'',selectedAssessment:[],resources:'',people:'',timeline:[],assistantSubject:'physics',assistantLessonType:'new',assistantFocus:'balanced',assistantResult:null};
-const ids=['duration','goal','topic','needs','audience','place','baseResources','realLife','assistantSubject','assistantLessonType','assistantFocus'];
-const defaultTimelineRu=[
- {min:5,activity:'Актуализация и быстрая диагностика. Короткий вопрос/пример, чтобы увидеть исходный уровень.',evidence:'Ответы, наблюдение, мини-задание',support:95,mode:'teacher'},
- {min:8,activity:'Моделирование: учитель показывает образец, проговаривает ход мысли и критерии успеха.',evidence:'Проверка понимания вопросами',support:80,mode:'teacher'},
- {min:10,activity:'Совместная практика: выполнить похожее задание вместе с подсказками, схемой или чек-листом.',evidence:'Наблюдение + обратная связь',support:60,mode:'shared'},
- {min:10,activity:'Практика в парах/группах. Часть подсказок убирается; ученики объясняют друг другу.',evidence:'Взаимооценивание / продукт группы',support:40,mode:'shared'},
- {min:8,activity:'Самостоятельное применение в новом контексте без готового алгоритма.',evidence:'Самостоятельный ответ/продукт',support:15,mode:'student'},
- {min:4,activity:'Рефлексия: что получилось, какая опора уже не нужна, какой следующий шаг?',evidence:'Самоанализ / выходной вопрос',support:5,mode:'student'}
-];
-const defaultTimelineKz=[
- {min:5,activity:'Өзектендіру және жедел диагностика. Бастапқы деңгейді көру үшін қысқа сұрақ/мысал.',evidence:'Жауаптар, бақылау, шағын тапсырма',support:95,mode:'teacher'},
- {min:8,activity:'Үлгілеу: мұғалім мысалды көрсетіп, ойлау қадамын және жетістік критерийлерін түсіндіреді.',evidence:'Сұрақтар арқылы түсінуді тексеру',support:80,mode:'teacher'},
- {min:10,activity:'Бірлескен тәжірибе: ұқсас тапсырманы кеңес, сызба немесе чек-парақпен бірге орындау.',evidence:'Бақылау + кері байланыс',support:60,mode:'shared'},
- {min:10,activity:'Жұптық/топтық тәжірибе. Тіректердің бір бөлігі алынады; оқушылар бір-біріне түсіндіреді.',evidence:'Өзара бағалау / топ өнімі',support:40,mode:'shared'},
- {min:8,activity:'Жаңа контексте дайын алгоритмсіз дербес қолдану.',evidence:'Дербес жауап/өнім',support:15,mode:'student'},
- {min:4,activity:'Рефлексия: не сәтті болды, қай тірек енді қажет емес, келесі қадам қандай?',evidence:'Өзіндік талдау / қорытынды сұрақ',support:5,mode:'student'}
-];
+        function checkStepMCQ(stepIndex, optIndex) {
+            const step = activeSteps[stepIndex];
+            if (step.correct === optIndex) {
+                showToast(i18n[currentLang].correctMsg, 'success');
+                step.solved = true;
+                currentStepIndex++;
+                renderGuidedSteps();
+                
+                // If it was the last step, show completion controls
+                if (currentStepIndex === activeSteps.length) {
+                    document.getElementById('next-task-container').classList.remove('hidden');
+                    document.getElementById('solution-text').innerHTML = currentTask.solutionText;
+                    renderMath();
+                    setTimeout(() => {
+                        document.getElementById('next-task-container').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 200);
+                }
+            } else {
+                showToast(i18n[currentLang].incorrectMsg, 'error');
+            }
+        }
 
-function tr(k){return I18N[state.lang][k]||k}
-function txt(item){return item[state.lang]||item.ru}
-function escapeHtml(s=''){return String(s).replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
-function toast(s){const el=document.getElementById('toast');el.textContent=s;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1600)}
-function save(){ids.forEach(id=>state[id]=document.getElementById(id).value);localStorage.setItem('scaffold_teacher_plan_v1',JSON.stringify(state));toast(tr('saved'))}
-function ensureState(){
- if(!state.competencyDiagnostics||typeof state.competencyDiagnostics!=='object')state.competencyDiagnostics={};
- if(typeof state.evidence!=='string')state.evidence='';if(!state.selectionMode)state.selectionMode='competency';if(typeof state.crossFilter!=='string')state.crossFilter='';
- if(!state.assistantSubject)state.assistantSubject='physics';if(!state.assistantLessonType)state.assistantLessonType='new';if(!state.assistantFocus)state.assistantFocus='balanced';if(state.assistantResult===undefined)state.assistantResult=null;
- (state.selectedCompetencies||[]).forEach(code=>{if(!state.competencyDiagnostics[code])state.competencyDiagnostics[code]={level:state.initialLevel||'',diagnostic:state.diagnostic??'',note:state.baseline||''}})
-}
-function load(){try{const x=JSON.parse(localStorage.getItem('scaffold_teacher_plan_v1'));if(x)Object.assign(state,x)}catch(e){} ensureState();if(!state.timeline?.length)state.timeline=(state.lang==='kz'?defaultTimelineKz:defaultTimelineRu).map(x=>({...x}));ids.forEach(id=>{if(state[id]!=null)document.getElementById(id).value=state[id]})}
+        function toggleSolution() {
+            const box = document.getElementById('solution-box');
+            const btn = document.getElementById('btn-solution');
+            const span = document.getElementById('ui-showSolution');
+            
+            if (box.classList.contains('hidden')) {
+                box.classList.remove('hidden');
+                span.innerText = i18n[currentLang].hideSolution;
+                btn.classList.replace('bg-slate-100', 'bg-indigo-100');
+                btn.classList.replace('text-slate-700', 'text-indigo-800');
+                box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                box.classList.add('hidden');
+                span.innerText = i18n[currentLang].showSolution;
+                btn.classList.replace('bg-indigo-100', 'bg-slate-100');
+                btn.classList.replace('text-indigo-800', 'text-slate-700');
+            }
+        }
 
-const HISTORY_LIMIT=100;
-let historyStack=[],historyIndex=-1,historyTimer=null,restoringHistory=false;
-function syncBaseFields(){ids.forEach(id=>{const el=document.getElementById(id);if(el)state[id]=el.value})}
-function historySnapshot(){syncBaseFields();return JSON.stringify(state)}
-function updateHistoryButtons(){const u=document.getElementById('undoBtn'),r=document.getElementById('redoBtn');if(u)u.disabled=historyIndex<=0;if(r)r.disabled=historyIndex<0||historyIndex>=historyStack.length-1}
-function pushHistoryNow(){
- if(restoringHistory)return;
- clearTimeout(historyTimer);historyTimer=null;
- const snap=historySnapshot();
- if(historyIndex>=0&&historyStack[historyIndex]===snap){updateHistoryButtons();return}
- historyStack=historyStack.slice(0,historyIndex+1);historyStack.push(snap);
- if(historyStack.length>HISTORY_LIMIT)historyStack.shift();
- historyIndex=historyStack.length-1;updateHistoryButtons();
-}
-function scheduleHistory(){if(restoringHistory)return;clearTimeout(historyTimer);historyTimer=setTimeout(pushHistoryNow,450)}
-function restoreHistorySnapshot(snap){
- try{
-  restoringHistory=true;clearTimeout(historyTimer);historyTimer=null;
-  const obj=JSON.parse(snap);Object.assign(state,obj);ensureState();
-  ids.forEach(id=>{const el=document.getElementById(id);if(el)el.value=state[id]??''});
-  applyLang();
- }finally{restoringHistory=false;updateHistoryButtons()}
-}
-function undoChange(){
- pushHistoryNow();
- if(historyIndex<=0){toast(tr('nothingUndo'));return}
- historyIndex--;restoreHistorySnapshot(historyStack[historyIndex]);toast(tr('undone'));
-}
-function redoChange(){
- clearTimeout(historyTimer);historyTimer=null;
- if(historyIndex<0||historyIndex>=historyStack.length-1){toast(tr('nothingRedo'));return}
- historyIndex++;restoreHistorySnapshot(historyStack[historyIndex]);toast(tr('redone'));
-}
-
-const stepInfo=[['step1','s1hint'],['step2','s2hint'],['step3','s3hint'],['step4','s4hint'],['step5','s5hint'],['step6','s6hint'],['step7','s7hint']];
-function renderSteps(){
- const s=document.getElementById('steps');s.innerHTML=stepInfo.map((x,i)=>`<button class="step ${state.step===i+1?'active':''} ${isStepDone(i+1)?'done':''}" data-step="${i+1}">${i+1}. ${tr(x[0])}</button>`).join('');
- s.querySelectorAll('button').forEach(b=>b.onclick=()=>{state.step=+b.dataset.step;renderSteps();renderPanes()});
- document.getElementById('progressBadge').textContent=`${[1,2,3,4,5,6,7].filter(isStepDone).length} / 7`;
-}
-function diagnosticsComplete(){const sel=state.selectedCompetencies||[];return sel.length>0&&sel.every(c=>{const d=state.competencyDiagnostics?.[c];return d&&d.level&&d.diagnostic!==''})}
-function isStepDone(n){if(n===1)return state.selectedCompetencies.length>0;if(n===2)return diagnosticsComplete();if(n===3)return state.selectedTeaching.length>0;if(n===4)return state.outcome.trim().length>5&&state.evidence.trim().length>2&&state.indicator.trim().length>2;if(n===5)return state.selectedAssessment.length>0;if(n===6)return state.resources.trim().length>2||document.getElementById('baseResources').value.trim().length>2;if(n===7)return state.timeline.length>0&&Math.abs(totalMinutes()-Number(document.getElementById('duration').value||0))<=2;return false}
-function categoryHtml(key,labelKey){return `<details class="category" data-kind="${key}" open><summary>${tr(labelKey)}</summary><div class="inside chooser" data-cat="${key}"></div></details>`}
-function coreCount(){return (state.selectedCompetencies||[]).filter(c=>!c.startsWith('t.')).length}
-function compCategory(code){if(code.startsWith('d.'))return'digital';if(code.startsWith('e.'))return'entre';if(code.startsWith('g.'))return'sustain';if(code.startsWith('l.'))return'personal';return'trans'}
-function ensureDiag(code){if(!state.competencyDiagnostics[code])state.competencyDiagnostics[code]={level:'',diagnostic:'',note:''};return state.competencyDiagnostics[code]}
-function relatedSuggestions(){const score={};(state.selectedCompetencies||[]).filter(c=>!c.startsWith('t.')).forEach(c=>(COMP_LINKS[c]||[]).forEach(x=>{if(!(state.selectedCompetencies||[]).includes(x))score[x]=(score[x]||0)+1}));return Object.entries(score).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0])).map(x=>x[0]).slice(0,12)}
-function crossNavHtml(){return `<div class="cross-box"><div class="cross-title">${tr('crossGuide')}</div><div class="hint" style="margin-bottom:8px">${tr('crossHint')}</div><div class="cross-nav">${competencies.trans.map(c=>`<button class="cross-pill ${state.crossFilter===c.code?'active':''}" data-cross="${c.code}"><b>${c.code}</b> · ${escapeHtml(txt(c))}<small>${state.selectedCompetencies.includes(c.code)?'✓ '+tr('selected'):''}</small></button>`).join('')}</div>${state.crossFilter?`<button class="btn ghost" id="clearCross" style="margin-top:8px">× ${tr('clearFilter')}</button>`:''}</div>`}
-function renderCompetencyChoices(root,filter=''){
- ['digital','entre','sustain','personal'].forEach(key=>{const box=root.querySelector(`[data-cat="${key}"]`);if(!box)return;const q=filter.toLowerCase();box.innerHTML=competencies[key].filter(c=>(c.code+' '+c.ru+' '+c.kz).toLowerCase().includes(q)).map(c=>{const match=!state.crossFilter||(COMP_TAGS[c.code]||[]).includes(state.crossFilter);return `<div class="choice ${state.selectedCompetencies.includes(c.code)?'selected ':''}${state.crossFilter?(match?'match':'dim'):''}" data-code="${c.code}"><div class="code">${c.code}</div><div class="name">${escapeHtml(txt(c))}</div></div>`}).join('');box.querySelectorAll('.choice').forEach(el=>el.onclick=()=>{const code=el.dataset.code;state.selectedCompetencies=state.selectedCompetencies.includes(code)?state.selectedCompetencies.filter(x=>x!==code):[...state.selectedCompetencies,code];ensureDiag(code);renderPanes();afterChange()})})
-}
-function chooserMethods(items,selected,key){return `<div class="chooser">${items.map((m,i)=>`<div class="choice ${selected.includes(i)?'selected':''}" data-i="${i}"><div class="name">${escapeHtml(txt(m))}</div><div class="desc">${escapeHtml(m[state.lang==='kz'?'descKz':'descRu'])}</div>${key==='teaching'?`<details class="method-help"><summary>ⓘ ${tr('howTo')}</summary><ol>${METHOD_STEPS[i][state.lang].map(s=>`<li>${escapeHtml(s)}</li>`).join('')}</ol></details>`:''}</div>`).join('')}</div>`}
-function nav(){return `<div class="navrow"><button class="btn" data-nav="back">← ${tr('back')}</button><button class="btn primary" data-nav="next">${tr('next')} →</button></div>`}
-function renderPanes(){
- const p=document.getElementById('stepPanes');let html='';
- if(state.step===1){const rel=relatedSuggestions();html=`<div class="step-pane active"><h3>${tr('step1')}</h3><p class="hint">${tr('s1hint')}</p><div class="modebar"><button class="modebtn ${state.selectionMode==='competency'?'active':''}" data-selmode="competency">🎯 ${tr('byCompetency')}</button><button class="modebtn ${state.selectionMode==='cross'?'active':''}" data-selmode="cross">🔗 ${tr('byCross')}</button><button class="modebtn" id="randomComp">🎲 ${tr('randomIdea')}</button></div>${crossNavHtml()}<input class="search" id="compSearch" placeholder="${tr('search')}">${categoryHtml('digital','competencyDigital')}${categoryHtml('entre','competencyEntre')}${categoryHtml('sustain','competencySustain')}${categoryHtml('personal','competencyPersonal')}<div class="notice ${coreCount()>=3?'ok':''}">${coreCount()>=3?tr('threeReady'):tr('minThree')}</div><div class="chips">${state.selectedCompetencies.map(c=>`<span class="chip cat-${compCategory(c)}">${c} · ${escapeHtml(txt(findComp(c)))}<button data-rm="${c}">×</button></span>`).join('')}</div>${rel.length?`<div class="related-box"><div class="related-title">${tr('related')}</div><div class="related-list">${rel.map(c=>`<button class="related-btn" data-addrel="${c}">+ ${c} · ${escapeHtml(txt(findComp(c)))}</button>`).join('')}</div></div>`:''}${nav()}</div>`}
- if(state.step===2){html=`<div class="step-pane active"><h3>${tr('step2')}</h3><p class="hint">${tr('diagPerComp')}</p>${state.selectedCompetencies.length?`<div class="diag-list">${state.selectedCompetencies.map(c=>{const d=ensureDiag(c),x=findComp(c);return `<div class="diag-card" data-diag="${c}"><div class="diag-head"><div class="codebox">${c}</div><div class="diag-name">${escapeHtml(txt(x))}</div></div><div class="diag-grid"><select class="diag-level"><option value="">${tr('level0')}</option><option value="1" ${d.level==='1'?'selected':''}>${tr('level1')}</option><option value="2" ${d.level==='2'?'selected':''}>${tr('level2')}</option><option value="3" ${d.level==='3'?'selected':''}>${tr('level3')}</option><option value="4" ${d.level==='4'?'selected':''}>${tr('level4')}</option></select><select class="diag-method"><option value=""></option>${assessmentMethods.map((m,i)=>`<option value="${i}" ${String(d.diagnostic)===String(i)?'selected':''}>${escapeHtml(txt(m))}</option>`).join('')}</select><textarea class="diag-note" placeholder="${tr('diagNotePh')}">${escapeHtml(d.note||'')}</textarea></div></div>`}).join('')}</div>`:`<div class="notice">${tr('noCompetencies')}</div>`}${nav()}</div>`}
- if(state.step===3)html=`<div class="step-pane active"><h3>${tr('step3')}</h3><p class="hint">${tr('s3hint')}</p>${chooserMethods(teachingMethods,state.selectedTeaching,'teaching')}${nav()}</div>`;
- if(state.step===4)html=`<div class="step-pane active"><h3>${tr('step4')}</h3><p class="hint">${tr('s4hint')}</p><div class="grid g3"><div class="field"><label>${tr('outcome')}</label><textarea id="outcome">${escapeHtml(state.outcome)}</textarea></div><div class="field"><label>${tr('evidenceProduct')}</label><textarea id="evidence" placeholder="${tr('evidencePh')}">${escapeHtml(state.evidence)}</textarea></div><div class="field"><label>${tr('indicator')}</label><textarea id="indicator">${escapeHtml(state.indicator)}</textarea></div></div>${nav()}</div>`;
- if(state.step===5)html=`<div class="step-pane active"><h3>${tr('step5')}</h3><p class="hint">${tr('s5hint')}</p>${chooserMethods(assessmentMethods,state.selectedAssessment,'assessment')}${nav()}</div>`;
- if(state.step===6)html=`<div class="step-pane active"><h3>${tr('step6')}</h3><p class="hint">${tr('s6hint')}</p><div class="grid g2"><div class="field"><label>${tr('lessonResources')}</label><textarea id="resources">${escapeHtml(state.resources)}</textarea></div><div class="field"><label>${tr('people')}</label><textarea id="people">${escapeHtml(state.people)}</textarea></div></div>${nav()}</div>`;
- if(state.step===7)html=`<div class="step-pane active"><h3>${tr('step7')}</h3><p class="hint">${tr('s7hint')}</p><div class="timeline" id="timeline"></div><button class="btn" id="addStage">+ ${tr('addStage')}</button>${nav()}</div>`;
- p.innerHTML=html;
- if(state.step===1){const search=p.querySelector('#compSearch');renderCompetencyChoices(p,'');search.oninput=()=>renderCompetencyChoices(p,search.value);p.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{state.selectedCompetencies=state.selectedCompetencies.filter(x=>x!==b.dataset.rm);if(state.crossFilter===b.dataset.rm)state.crossFilter='';renderPanes();afterChange()});p.querySelectorAll('[data-cross]').forEach(b=>b.onclick=()=>{const code=b.dataset.cross;const exists=state.selectedCompetencies.includes(code);if(state.crossFilter===code&&exists){state.selectedCompetencies=state.selectedCompetencies.filter(x=>x!==code);state.crossFilter=''}else{if(!exists)state.selectedCompetencies.push(code);state.crossFilter=code;state.selectionMode='cross';ensureDiag(code)}renderPanes();afterChange()});p.querySelector('#clearCross')?.addEventListener('click',()=>{state.crossFilter='';renderPanes();afterChange(false)});p.querySelectorAll('[data-selmode]').forEach(b=>b.onclick=()=>{state.selectionMode=b.dataset.selmode;if(state.selectionMode==='competency')state.crossFilter='';renderPanes();afterChange(false)});p.querySelector('#randomComp').onclick=()=>{const pool=['digital','entre','sustain','personal'].flatMap(k=>competencies[k]).filter(c=>!state.selectedCompetencies.includes(c.code));if(pool.length){const c=pool[Math.floor(Math.random()*pool.length)];state.selectedCompetencies.push(c.code);ensureDiag(c.code);state.selectionMode='random';toast(tr('randomPicked'));renderPanes();afterChange()}};p.querySelectorAll('[data-addrel]').forEach(b=>b.onclick=()=>{const code=b.dataset.addrel;if(!state.selectedCompetencies.includes(code)){state.selectedCompetencies.push(code);ensureDiag(code)}renderPanes();afterChange()})}
- if(state.step===2){p.querySelectorAll('[data-diag]').forEach(card=>{const code=card.dataset.diag,d=ensureDiag(code);card.querySelector('.diag-level').onchange=e=>{d.level=e.target.value;afterChange()};card.querySelector('.diag-method').onchange=e=>{d.diagnostic=e.target.value;afterChange()};card.querySelector('.diag-note').oninput=e=>{d.note=e.target.value;afterChange(false,true)}})}
- if(state.step===3){p.querySelectorAll('.method-help').forEach(d=>d.onclick=e=>e.stopPropagation());p.querySelectorAll('.choice').forEach(el=>el.onclick=()=>{const i=+el.dataset.i;state.selectedTeaching=state.selectedTeaching.includes(i)?state.selectedTeaching.filter(x=>x!==i):[...state.selectedTeaching,i];renderPanes();afterChange()})}
- if(state.step===4){p.querySelector('#outcome').oninput=e=>{state.outcome=e.target.value;afterChange(false,true)};p.querySelector('#evidence').oninput=e=>{state.evidence=e.target.value;afterChange(false,true)};p.querySelector('#indicator').oninput=e=>{state.indicator=e.target.value;afterChange(false,true)}}
- if(state.step===5){p.querySelectorAll('.choice').forEach(el=>el.onclick=()=>{const i=+el.dataset.i;state.selectedAssessment=state.selectedAssessment.includes(i)?state.selectedAssessment.filter(x=>x!==i):[...state.selectedAssessment,i];renderPanes();afterChange()})}
- if(state.step===6){p.querySelector('#resources').oninput=e=>{state.resources=e.target.value;afterChange(false,true)};p.querySelector('#people').oninput=e=>{state.people=e.target.value;afterChange(false,true)}}
- if(state.step===7){renderTimeline();p.querySelector('#addStage').onclick=()=>{state.timeline.push({min:5,activity:'',evidence:'',support:20,mode:'student'});renderPanes();afterChange()}}
- p.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>{state.step=Math.min(7,Math.max(1,state.step+(b.dataset.nav==='next'?1:-1)));renderSteps();renderPanes()});
-}
-function renderTimeline(){const root=document.getElementById('timeline');if(!root)return;root.innerHTML=state.timeline.map((r,i)=>`<div class="tlrow" data-r="${i}"><div class="min"><input type="number" min="1" max="90" value="${r.min}"><div class="tiny">${tr('minutes')}</div></div><div><textarea class="act" rows="3" placeholder="${tr('timelineActivity')}">${escapeHtml(r.activity)}</textarea><textarea class="ev" rows="2" placeholder="${tr('assessmentEvidence')}">${escapeHtml(r.evidence)}</textarea></div><div class="supportbox"><input class="sup" type="range" min="0" max="100" step="5" value="${r.support}"><div class="tiny">${tr('support')}: <b>${r.support}%</b></div><div class="support"><i style="width:${r.support}%"></i></div></div><div class="modebox"><select class="mode"><option value="teacher" ${r.mode==='teacher'?'selected':''}>${tr('teacherLead')}</option><option value="shared" ${r.mode==='shared'?'selected':''}>${tr('shared')}</option><option value="student" ${r.mode==='student'?'selected':''}>${tr('studentLead')}</option></select><button class="btn danger rm" style="margin-top:6px;width:100%">×</button></div></div>`).join('');root.querySelectorAll('.tlrow').forEach(row=>{const i=+row.dataset.r;row.querySelector('.min input').oninput=e=>{state.timeline[i].min=+e.target.value;afterChange(false,true)};row.querySelector('.act').oninput=e=>{state.timeline[i].activity=e.target.value;afterChange(false,true)};row.querySelector('.ev').oninput=e=>{state.timeline[i].evidence=e.target.value;afterChange(false,true)};row.querySelector('.sup').oninput=e=>{state.timeline[i].support=+e.target.value;renderTimeline();afterChange(false,true)};row.querySelector('.mode').onchange=e=>{state.timeline[i].mode=e.target.value;afterChange()};row.querySelector('.rm').onclick=()=>{state.timeline.splice(i,1);renderPanes();afterChange()}})}
-function totalMinutes(){return (state.timeline||[]).reduce((a,b)=>a+(Number(b.min)||0),0)}
-function supportDeclines(){if(state.timeline.length<2)return false;let rises=0;for(let i=1;i<state.timeline.length;i++)if(Number(state.timeline[i].support)>Number(state.timeline[i-1].support)+10)rises++;return rises===0 && Number(state.timeline[0].support)>=Number(state.timeline[state.timeline.length-1].support)}
-function checks(){const dur=Number(document.getElementById('duration').value||0),sum=totalMinutes();return [
- [state.selectedCompetencies.length>0,tr('step1')],[diagnosticsComplete(),tr('step2')],[state.selectedTeaching.length>0,tr('step3')],[state.outcome.trim().length>5&&state.evidence.trim().length>2&&state.indicator.trim().length>2,tr('step4')],[state.selectedAssessment.length>0,tr('step5')],[(state.resources+document.getElementById('baseResources').value).trim().length>2,tr('step6')],[Math.abs(sum-dur)<=2,`${tr('step7')}: ${sum}/${dur} ${tr('minutes')}`],[supportDeclines(),tr('scaffoldCheck')],[state.timeline.some(x=>x.mode==='teacher')&&state.timeline.some(x=>x.mode==='student'),state.lang==='ru'?'Есть переход «учитель ведёт → ученик ведёт»':'«Мұғалім жетекші → оқушы жетекші» ауысуы бар']];}
-function renderChecklist(){document.getElementById('checklist').innerHTML=checks().map(([ok,label])=>`<div class="check ${ok?'ok':'warn'}"><span class="dot">${ok?'✓':'!'}</span><div><b>${escapeHtml(label)}</b><div class="tiny">${ok?tr('good'):tr('attention')}</div></div></div>`).join('')}
-function findComp(code){for(const arr of Object.values(competencies)){const x=arr.find(c=>c.code===code);if(x)return x}return {code,ru:code,kz:code}}
-function fieldVal(id){return document.getElementById(id)?.value?.trim()||''}
-function v(s){return s?escapeHtml(s):`<span class="empty">${tr('empty')}</span>`}
-function selectedNames(arr,items){return arr.map(i=>escapeHtml(txt(items[i]))).join(', ')||`<span class="empty">${tr('empty')}</span>`}
-function qualityChecks(){const txtAll=((state.timeline||[]).map(x=>x.activity+' '+x.evidence).join(' ')+' '+fieldVal('realLife')+' '+state.people+' '+state.outcome+' '+state.evidence).toLowerCase();const ru=state.lang==='ru';const hasReflect=/рефлекс|самоанализ|reflection|рефлексия|қорытынды|өзін-өзі/.test(txtAll)||state.selectedAssessment.includes(1);const hasEmotion=/интерес|выбор|мотива|эмоц|игр|қызығ|таңдау|мотива|эмоц|ойын/.test(txtAll)||state.selectedTeaching.includes(4);const q=[
- [fieldVal('realLife').length>3||state.selectedTeaching.some(i=>[0,5,6].includes(i)),QUALITY_PRINCIPLES[state.lang][0],ru?'Добавьте реальную задачу, опыт, эксперимент или аудиторию.':'Нақты міндетті, тәжірибені, экспериментті немесе аудиторияны қосыңыз.'],
- [hasReflect,QUALITY_PRINCIPLES[state.lang][1],ru?'Запланируйте рефлексию или самоанализ.':'Рефлексияны немесе өзіндік талдауды жоспарлаңыз.'],
- [state.timeline.some(x=>x.mode==='student')||state.selectedTeaching.includes(1),QUALITY_PRINCIPLES[state.lang][2],ru?'Добавьте выбор, самостоятельное решение или этап, где ведёт ученик.':'Таңдау, дербес шешім немесе оқушы жетекші болатын кезең қосыңыз.'],
- [supportDeclines()&&state.timeline.some(x=>x.mode==='shared'),QUALITY_PRINCIPLES[state.lang][3],ru?'Покажите переход от объяснения к совместной и самостоятельной работе.':'Түсіндіруден бірлескен және дербес жұмысқа көшуді көрсетіңіз.'],
- [state.people.trim().length>2||state.selectedTeaching.some(i=>[2,6].includes(i)),QUALITY_PRINCIPLES[state.lang][4],ru?'При необходимости подключите реальных людей, сообщество или внешнюю аудиторию.':'Қажет болса, нақты адамдарды, қауымды немесе сыртқы аудиторияны қосыңыз.'],
- [hasEmotion,QUALITY_PRINCIPLES[state.lang][5],ru?'Добавьте интерес, выбор, вызов, игру или эмоционально значимый контекст.':'Қызығушылық, таңдау, сын-қатер, ойын немесе эмоциялық мәні бар контекст қосыңыз.'],
- [state.selectedAssessment.length>=2||(state.evidence.trim().length>2&&state.timeline.filter(x=>(x.evidence||'').trim()).length>=2),QUALITY_PRINCIPLES[state.lang][6],ru?'Используйте несколько источников доказательств прогресса и сделайте критерии видимыми.':'Ілгерілеудің бірнеше дәлел көзін пайдаланып, критерийлерді көрнекі етіңіз.']
- ];return q}
-function renderQuality(){const root=document.getElementById('qualityChecklist');if(!root)return;const q=qualityChecks(),score=q.filter(x=>x[0]).length;document.getElementById('qualityScore').textContent=`${score} / 7 ${tr('reflected')}`;root.innerHTML=q.map(([ok,title,why])=>`<div class="check ${ok?'ok':'warn'}"><span class="dot">${ok?'✓':'!'}</span><div><b>${escapeHtml(title)}</b><div class="why">${ok?(state.lang==='ru'?'Отражено в плане.':'Жоспарда қамтылған.'):escapeHtml(why)}</div></div></div>`).join('')}
-function renderPreview(){
- const diagRows=(state.selectedCompetencies||[]).map(c=>{const d=ensureDiag(c),x=findComp(c),lev=d.level?tr('level'+d.level):'',method=d.diagnostic!==''?txt(assessmentMethods[+d.diagnostic]):'';return `<tr><td>${c} · ${escapeHtml(txt(x))}</td><td>${v(lev)}</td><td>${v(method)}</td><td>${v(d.note||'')}</td></tr>`}).join('');
- const rows=state.timeline.map((r,i)=>`<tr><td>${i+1}</td><td>${r.min}</td><td>${v(r.activity)}</td><td>${v(r.evidence)}</td><td>${r.support}%</td></tr>`).join('');
- document.getElementById('planPreview').innerHTML=`<h3>${tr('planTitle')}</h3><div class="line"><b>${tr('assistantSubjectWord')}:</b> ${v(assistantOptLabel('subjects',state.assistantSubject))}</div><div class="line"><b>${tr('topic')}:</b> ${v(fieldVal('topic'))}</div><div class="line"><b>${tr('duration')}:</b> ${v(fieldVal('duration'))} ${tr('minutes')}</div><div class="line"><b>${tr('goal')}:</b> ${v(fieldVal('goal'))}</div><h3>${tr('taskFrame')}</h3><div class="line"><b>${tr('needs')}:</b> ${v(fieldVal('needs'))}</div><div class="line"><b>${tr('audience')}:</b> ${v(fieldVal('audience'))}</div><div class="line"><b>${tr('place')}:</b> ${v(fieldVal('place'))}</div><div class="line"><b>${tr('realLife')}:</b> ${v(fieldVal('realLife'))}</div><h3>1. ${tr('competencies')}</h3><div class="line">${state.selectedCompetencies.length?state.selectedCompetencies.map(c=>{const x=findComp(c);return `<span class="chip cat-${compCategory(c)}">${c} · ${escapeHtml(txt(x))}</span>`}).join(' '):`<span class="empty">${tr('empty')}</span>`}</div><h3>2. ${tr('initialAssessment')}</h3>${diagRows?`<table><thead><tr><th>${tr('competencies')}</th><th>${tr('initialLevel')}</th><th>${tr('diagnosticMethod')}</th><th>${tr('baselineNote')}</th></tr></thead><tbody>${diagRows}</tbody></table>`:`<div class="line"><span class="empty">${tr('empty')}</span></div>`}<h3>3. ${tr('teachingMethods')}</h3><div class="line">${selectedNames(state.selectedTeaching,teachingMethods)}</div><h3>4. ${tr('expected')}</h3><div class="line"><b>${tr('outcome')}:</b> ${v(state.outcome)}</div><div class="line"><b>${tr('evidenceProduct')}:</b> ${v(state.evidence)}</div><div class="line"><b>${tr('indicator')}:</b> ${v(state.indicator)}</div><h3>5. ${tr('assessment')}</h3><div class="line">${selectedNames(state.selectedAssessment,assessmentMethods)}</div><h3>6. ${tr('resources')}</h3><div class="line">${v([fieldVal('baseResources'),state.resources].filter(Boolean).join('; '))}</div><div class="line"><b>${tr('people')}:</b> ${v(state.people)}</div><h3>7. ${tr('chronology')}</h3><table><thead><tr><th>№</th><th>${tr('minutes')}</th><th>${tr('timelineActivity')}</th><th>${tr('assessmentEvidence')}</th><th>${tr('support')}</th></tr></thead><tbody>${rows}</tbody></table>`;
-}
-
-function assistantOptLabel(group,value){const x=(ASSISTANT_OPTIONS[group]||[]).find(o=>o.v===value);return x?(x[state.lang]||x.ru):value}
-function renderAssistantSelects(){
- [['assistantSubject','subjects'],['assistantLessonType','types'],['assistantFocus','focuses']].forEach(([id,key])=>{const el=document.getElementById(id);if(!el)return;const current=state[id]||el.value;el.innerHTML=(ASSISTANT_OPTIONS[key]||[]).map(o=>`<option value="${o.v}">${escapeHtml(o[state.lang]||o.ru)}</option>`).join('');el.value=current;if(!el.value){el.selectedIndex=0;state[id]=el.value}})
-}
-function assistantText(){return [fieldVal('topic'),fieldVal('goal'),fieldVal('needs'),fieldVal('realLife'),fieldVal('baseResources')].join(' ').toLowerCase()}
-function assistantAddScore(scores,reasons,code,points,ru,kz){scores[code]=(scores[code]||0)+points;if(!reasons[code])reasons[code]=[];reasons[code].push({points,ru,kz})}
-function assistantCategory(code){return compCategory(code)}
-function assistantPickCore(scores,n=4){
- const sorted=Object.keys(scores).filter(c=>!c.startsWith('t.')).sort((a,b)=>(scores[b]-scores[a])||a.localeCompare(b));const picked=[],counts={};
- for(const c of sorted){const cat=assistantCategory(c);if((counts[cat]||0)>=2)continue;picked.push(c);counts[cat]=(counts[cat]||0)+1;if(picked.length>=n)break}
- for(const c of sorted){if(picked.length>=n)break;if(!picked.includes(c))picked.push(c)}return picked
-}
-function assistantTopCross(core){const s={};core.forEach(c=>(COMP_TAGS[c]||[]).forEach(t=>s[t]=(s[t]||0)+1));if(!Object.keys(s).length){s['t.1']=2;s['t.2']=1}return Object.keys(s).sort((a,b)=>s[b]-s[a]).slice(0,3)}
-function assistantReason(code,reasons){const arr=(reasons[code]||[]).sort((a,b)=>b.points-a.points).slice(0,2);return arr.map(x=>x[state.lang]||x.ru).join(' · ')}
-function assistantAllocate(duration,weights){let mins=weights.map(w=>Math.max(2,Math.round(duration*w))),sum=mins.reduce((a,b)=>a+b,0);let diff=duration-sum;let order=[3,2,4,1,0,5],i=0;while(diff!==0&&i<200){const k=order[i%order.length];if(diff>0){mins[k]++;diff--}else if(mins[k]>2){mins[k]--;diff++}i++}return mins}
-const ASSISTANT_TIMELINES={
- new:{ru:[['Быстрая диагностика: вопрос, жизненная ситуация или короткое задание по теме.','Ответы / наблюдение'],['Моделирование: учитель показывает ключевую идею и проговаривает ход рассуждения.','Уточняющие вопросы'],['Совместная практика по образцу с визуальной опорой, схемой или чек-листом.','Наблюдение + обратная связь'],['Применение в паре/группе в немного изменённой ситуации; часть подсказок снимается.','Продукт пары/группы'],['Самостоятельное применение в новом контексте без готового алгоритма.','Самостоятельный продукт / ответ'],['Рефлексия: что уже могу сам, какая опора ещё нужна, следующий шаг.','Самоанализ / выходной вопрос']],kz:[['Жедел диагностика: тақырып бойынша сұрақ, өмірлік жағдаят немесе қысқа тапсырма.','Жауаптар / бақылау'],['Үлгілеу: мұғалім негізгі идеяны көрсетіп, ойлау барысын түсіндіреді.','Нақтылаушы сұрақтар'],['Үлгі бойынша көрнекі тірекпен, сызбамен немесе чек-парақпен бірлескен жұмыс.','Бақылау + кері байланыс'],['Жұпта/топта өзгертілген жағдаятта қолдану; тіректердің бір бөлігі алынады.','Жұп/топ өнімі'],['Дайын алгоритмсіз жаңа контексте дербес қолдану.','Дербес өнім / жауап'],['Рефлексия: нені өзім жасай аламын, қандай тірек әлі қажет, келесі қадам қандай.','Өзіндік талдау / қорытынды сұрақ']]},
- practice:{ru:[['Диагностическая задача: определить, какой способ решения уже доступен ученикам.','Короткое решение / вопросы'],['Разбор одного образца с комментированием выбора формулы, стратегии или алгоритма.','Проверка понимания'],['Совместное решение похожей задачи по подсказкам, таблице или схеме.','Наблюдение / устное объяснение'],['Серия заданий в парах с постепенным уменьшением подсказок и взаимопроверкой.','Взаимная обратная связь'],['Самостоятельная задача в новом или жизненном контексте.','Самостоятельное решение'],['Рефлексия ошибок и выбор следующего шага.','Самоанализ']],kz:[['Диагностикалық есеп: оқушыларға қандай шешу тәсілі қолжетімді екенін анықтау.','Қысқа шешім / сұрақтар'],['Формуланы, стратегияны немесе алгоритмді таңдауды түсіндіре отырып бір үлгіні талдау.','Түсінуді тексеру'],['Ұқсас есепті нұсқау, кесте немесе сызба көмегімен бірге шығару.','Бақылау / ауызша түсіндіру'],['Жұпта тапсырмалар сериясы: тіректер біртіндеп азаяды, өзара тексеру жүргізіледі.','Өзара кері байланыс'],['Жаңа немесе өмірлік контексте дербес есеп.','Дербес шешім'],['Қателерге рефлексия және келесі қадамды таңдау.','Өзіндік талдау']]},
- lab:{ru:[['Проблемный вопрос, прогноз результата и проверка исходных представлений.','Прогноз / ответы'],['Учитель моделирует безопасный способ измерения/наблюдения и критерии качественных данных.','Чек понимания и безопасности'],['Совместная проба: собрать установку или выполнить первый шаг по инструкции с опорами.','Наблюдение / чек-лист'],['Самостоятельное групповое исследование: измерения, таблица данных, график; подсказки сокращаются.','Протокол / данные / наблюдение'],['Индивидуальный анализ данных и вывод с опорой на доказательства.','График / расчёт / вывод'],['Рефлексия метода: надёжность данных, ошибки, что улучшить.','Самоанализ / обратная связь']],kz:[['Проблемалық сұрақ, нәтиже болжамы және бастапқы түсініктерді тексеру.','Болжам / жауаптар'],['Мұғалім қауіпсіз өлшеу/бақылау тәсілін және сапалы дерек критерийлерін үлгілейді.','Түсіну және қауіпсіздік тексеруі'],['Бірлескен сынақ: қондырғыны жинау немесе нұсқаулық бойынша алғашқы қадамды тірекпен орындау.','Бақылау / чек-парақ'],['Топтық дербес зерттеу: өлшеулер, деректер кестесі, график; нұсқаулар азаяды.','Хаттама / деректер / бақылау'],['Деректерді жеке талдау және дәлелге сүйенген қорытынды.','График / есептеу / қорытынды'],['Әдіске рефлексия: деректер сенімділігі, қателер, нені жақсарту керек.','Өзіндік талдау / кері байланыс']]},
- project:{ru:[['Представить реальную проблему и выяснить, что ученики уже знают о ней.','Идеи / вопросы'],['Показать пример продукта и вместе выделить критерии успеха.','Критерии / вопросы'],['Совместно сформулировать задачу проекта, роли, ресурсы и план действий.','План проекта'],['Командная разработка продукта; учитель консультирует точечно, а не ведёт каждый шаг.','Черновик / прототип / наблюдение'],['Самостоятельная доработка и обоснование решений перед аудиторией.','Продукт + защита'],['Рефлексия: ценность продукта, вклад участников, дальнейшее улучшение.','Само- и взаимооценивание']],kz:[['Нақты мәселені ұсыну және оқушылардың ол туралы не білетінін анықтау.','Идеялар / сұрақтар'],['Өнім үлгісін көрсетіп, жетістік критерийлерін бірге анықтау.','Критерийлер / сұрақтар'],['Жобаның міндетін, рөлдерді, ресурстарды және әрекет жоспарын бірге құру.','Жоба жоспары'],['Командалық өнім әзірлеу; мұғалім әр қадамды басқармай, қажет жерде кеңес береді.','Нобай / прототип / бақылау'],['Өнімді дербес жетілдіру және аудитория алдында шешімдерді негіздеу.','Өнім + қорғау'],['Рефлексия: өнімнің құндылығы, қатысушылар үлесі, әрі қарай жетілдіру.','Өзін-өзі және өзара бағалау']]},
- review:{ru:[['Короткое извлечение из памяти: 3–5 вопросов без подсказок.','Ответы / мини-тест'],['Учитель помогает собрать общую схему связей и выделяет типичные затруднения.','Карта понятий / вопросы'],['Совместное исправление типичных ошибок по критериям.','Разбор ошибок'],['Станции или группы: задания разных типов, ученики помогают друг другу.','Продукты станций / взаимооценка'],['Индивидуальное задание на перенос знаний в новый контекст.','Выходное задание'],['Рефлексия: что восстановлено, какой пробел остался.','Самооценка']],kz:[['Жадтан қысқа жаңғырту: нұсқаусыз 3–5 сұрақ.','Жауаптар / шағын тест'],['Мұғалім байланыстардың жалпы сызбасын құруға көмектесіп, типтік қиындықтарды көрсетеді.','Ұғымдар картасы / сұрақтар'],['Типтік қателерді критерий бойынша бірге түзету.','Қателерді талдау'],['Станциялар немесе топтар: әртүрлі тапсырмалар, оқушылар бір-біріне көмектеседі.','Станция өнімдері / өзара бағалау'],['Білімді жаңа контекске көшіруге арналған жеке тапсырма.','Қорытынды тапсырма'],['Рефлексия: не қалпына келді, қандай олқылық қалды.','Өзін-өзі бағалау']]},
- assessment:{ru:[['Критерии успеха и короткая настройка на формат работы.','Понимание критериев'],['Один нейтральный пример формата задания без раскрытия проверяемого ответа.','Уточняющие вопросы'],['Короткая тренировочная проба для снятия технических затруднений.','Наблюдение'],['Переход к самостоятельной работе; учитель отвечает только на организационные вопросы.','Ход выполнения'],['Основная самостоятельная работа с минимальной поддержкой.','Работа / продукт / ответы'],['Самопроверка по критериям и короткая рефлексия следующего шага.','Самоанализ']],kz:[['Жетістік критерийлері және жұмыс форматына қысқа бейімдеу.','Критерийлерді түсіну'],['Тексерілетін жауапты ашпайтын тапсырма форматының бейтарап үлгісі.','Нақтылаушы сұрақтар'],['Техникалық қиындықтарды жоюға арналған қысқа сынақ.','Бақылау'],['Дербес жұмысқа көшу; мұғалім тек ұйымдастыру сұрақтарына жауап береді.','Орындау барысы'],['Минималды қолдаумен негізгі дербес жұмыс.','Жұмыс / өнім / жауаптар'],['Критерий бойынша өзін-өзі тексеру және келесі қадамға қысқа рефлексия.','Өзіндік талдау']]}
-};
-function assistantTimeline(type,duration){const tpl=ASSISTANT_TIMELINES[type]||ASSISTANT_TIMELINES.new,arr=tpl[state.lang]||tpl.ru,weights={new:[.10,.18,.24,.22,.18,.08],practice:[.10,.15,.25,.25,.18,.07],lab:[.10,.14,.18,.31,.19,.08],project:[.09,.12,.18,.34,.19,.08],review:[.12,.14,.19,.29,.18,.08],assessment:[.08,.08,.10,.10,.56,.08]}[type]||[.1,.18,.24,.22,.18,.08],mins=assistantAllocate(Math.max(20,duration||45),weights),support=[95,80,60,40,15,5],modes=['teacher','teacher','shared','shared','student','student'];return arr.map((x,i)=>({min:mins[i],activity:x[0],evidence:x[1],support:support[i],mode:modes[i]}))}
-function assistantTemplates(subject,type,topic){const t=topic|| (state.lang==='ru'?'теме урока':'сабақ тақырыбы');const ru={new:[`Объясняет ключевую идею по теме «${t}» и применяет её в типовой и новой ситуации.`,`Мини-задание, объяснение хода рассуждения и самостоятельное применение.`,`Корректно использует основные понятия; объясняет ход рассуждения; применяет знание в изменённой ситуации.`],practice:[`Применяет знания по теме «${t}» при решении задач и обосновывает выбранный способ.`,`Решённые задачи с объяснением, проверкой и одним заданием в новом контексте.`,`Выбирает подходящий способ; выполняет решение без существенных ошибок; объясняет и проверяет результат.`],lab:[`Проводит исследование по теме «${t}», анализирует данные и формулирует обоснованный вывод.`,`Протокол/таблица данных, график или расчёт, вывод по результатам исследования.`,`Соблюдает процедуру; фиксирует данные; корректно анализирует их; вывод опирается на полученные доказательства.`],project:[`Создаёт продукт по теме «${t}» для решения поставленной проблемы и обосновывает принятые решения.`,`Модель/прототип/постер/презентация и краткая защита продукта.`,`Продукт соответствует задаче и критериям; решения обоснованы; виден вклад учащегося и использование обратной связи.`],review:[`Систематизирует знания по теме «${t}», выявляет пробелы и применяет материал в новой ситуации.`,`Карта связей, исправление ошибок и индивидуальное выходное задание.`,`Устанавливает основные связи; исправляет ошибки с объяснением; выполняет перенос знаний самостоятельно.`],assessment:[`Демонстрирует освоение ключевых результатов по теме «${t}» в самостоятельной работе.`,`Самостоятельная работа/продукт и краткая самопроверка по критериям.`,`Выполняет работу самостоятельно; соблюдает критерии; может определить собственный следующий шаг.`]};const kz={new:[`«${t}» тақырыбының негізгі идеясын түсіндіреді және оны типтік әрі жаңа жағдаятта қолданады.`,`Шағын тапсырма, ойлау барысын түсіндіру және дербес қолдану.`,`Негізгі ұғымдарды дұрыс қолданады; ойлау барысын түсіндіреді; білімді өзгертілген жағдаятта қолданады.`],practice:[`«${t}» тақырыбы бойынша білімін есеп шығаруда қолданып, таңдалған тәсілді негіздейді.`,`Түсіндіруі, тексеруі және жаңа контекстегі бір тапсырмасы бар шешілген есептер.`,`Тиісті тәсілді таңдайды; елеулі қатесіз орындайды; нәтижені түсіндіреді және тексереді.`],lab:[`«${t}» тақырыбы бойынша зерттеу жүргізіп, деректерді талдайды және дәлелді қорытынды жасайды.`,`Зерттеу хаттамасы/деректер кестесі, график немесе есептеу, қорытынды.`,`Процедураны сақтайды; деректерді тіркейді; дұрыс талдайды; қорытынды алынған дәлелдерге сүйенеді.`],project:[`«${t}» тақырыбы бойынша қойылған мәселені шешуге арналған өнім жасап, қабылданған шешімдерді негіздейді.`,`Модель/прототип/постер/презентация және өнімді қысқа қорғау.`,`Өнім міндет пен критерийлерге сәйкес; шешімдер негізделген; оқушының үлесі және кері байланысты қолдануы көрінеді.`],review:[`«${t}» тақырыбы бойынша білімді жүйелейді, олқылықтарды анықтайды және материалды жаңа жағдаятта қолданады.`,`Байланыстар картасы, қателерді түзету және жеке қорытынды тапсырма.`,`Негізгі байланыстарды орнатады; қателерді түсіндіріп түзетеді; білімді дербес тасымалдайды.`],assessment:[`«${t}» тақырыбы бойынша негізгі оқу нәтижелерін дербес жұмыста көрсетеді.`,`Дербес жұмыс/өнім және критерий бойынша қысқа өзін-өзі тексеру.`,`Жұмысты дербес орындайды; критерийлерді сақтайды; өзінің келесі қадамын анықтай алады.`]};return (state.lang==='kz'?kz:ru)[type]||(state.lang==='kz'?kz:ru).new}
-function assistantContextIdeas(subject,topic){const ru={physics:['Связать тему с измерениями, бытовыми приборами, транспортом, энергией или наблюдаемым физическим явлением.','Измерительные приборы, простые материалы, схема/график; при необходимости цифровая симуляция.'],math:['Использовать тариф, бюджет, измерение, маршрут, данные или график из повседневной ситуации.','Карточки задач, таблица/график, калькулятор или динамическая модель при необходимости.'],chemistry:['Связать с материалами, водой, продуктами, бытовой химией или экологической ситуацией.','Безопасные реактивы/модели, лабораторная посуда, таблица наблюдений, средства защиты.'],biology:['Связать с организмом, здоровьем, экосистемой или наблюдением живых объектов.','Изображения/образцы, таблица наблюдений, модель, источник данных.'],geography:['Связать с местной территорией, картой, климатом, ресурсами или экологическими данными.','Карта, статистические данные, диаграммы, спутниковые/фото материалы при наличии.'],informatics:['Связать с реальной цифровой задачей пользователя, данными, безопасностью или созданием продукта.','Компьютер/устройство, учебные файлы, среда программирования или цифровой инструмент.'],other:['Использовать реальную ситуацию, в которой результат урока имеет понятное практическое применение.','Материалы для выполнения продукта, наглядность и инструмент для фиксации результата.']};const kz={physics:['Тақырыпты өлшеулермен, тұрмыстық құралдармен, көлікпен, энергиямен немесе бақыланатын физикалық құбылыспен байланыстырыңыз.','Өлшеу құралдары, қарапайым материалдар, сызба/график; қажет болса цифрлық симуляция.'],math:['Күнделікті жағдайдан тариф, бюджет, өлшеу, маршрут, деректер немесе график қолданыңыз.','Есеп карточкалары, кесте/график, калькулятор немесе қажет болса динамикалық модель.'],chemistry:['Материалдармен, сумен, тағаммен, тұрмыстық химиямен немесе экологиялық жағдаятпен байланыстырыңыз.','Қауіпсіз реактивтер/модельдер, зертханалық ыдыс, бақылау кестесі, қорғаныс құралдары.'],biology:['Ағзамен, денсаулықпен, экожүйемен немесе тірі нысандарды бақылаумен байланыстырыңыз.','Суреттер/үлгілер, бақылау кестесі, модель, деректер көзі.'],geography:['Жергілікті аумақпен, картамен, климатпен, ресурстармен немесе экологиялық деректермен байланыстырыңыз.','Карта, статистикалық деректер, диаграммалар, қолжетімді болса спутниктік/фото материалдар.'],informatics:['Пайдаланушының нақты цифрлық міндетімен, деректермен, қауіпсіздікпен немесе өнім жасаумен байланыстырыңыз.','Компьютер/құрылғы, оқу файлдары, бағдарламалау ортасы немесе цифрлық құрал.'],other:['Сабақ нәтижесінің түсінікті практикалық қолданылуы бар нақты жағдаятты пайдаланыңыз.','Өнім жасау материалдары, көрнекілік және нәтижені тіркеу құралы.']};return (state.lang==='kz'?kz:ru)[subject]||(state.lang==='kz'?kz:ru).other}
-function runSmartAssistant(){
- syncBaseFields();const raw=assistantText();if(!fieldVal('topic')&&!fieldVal('goal')){toast(tr('assistantNeedInput'));return}
- const scores={},reasons={},subject=state.assistantSubject||'physics',type=state.assistantLessonType||'new',focus=state.assistantFocus||'balanced';
- const add=(c,p,ru,kz)=>assistantAddScore(scores,reasons,c,p,ru,kz);
- const subjectBase={physics:[['l.8',5],['g.9',5],['g.4',4],['e.15',3]],math:[['l.8',5],['g.6',5],['e.15',4],['g.4',3]],chemistry:[['g.9',5],['l.8',5],['e.15',4],['g.4',3]],biology:[['g.9',5],['g.4',4],['l.8',4],['g.3',2]],geography:[['g.4',5],['g.5',4],['g.1',3],['l.8',3]],informatics:[['d.13',5],['d.18',4],['l.8',4],['d.20',3]],other:[['l.8',5],['g.6',4],['e.15',3],['g.4',3]]};
- (subjectBase[subject]||subjectBase.other).forEach(([c,p])=>add(c,p,'Соответствует типичным учебным действиям выбранного предмета.','Таңдалған пәндегі типтік оқу әрекеттеріне сәйкес.'));
- const typeBase={new:[['l.8',3],['l.9',2]],practice:[['g.6',4],['e.15',3]],lab:[['g.9',5],['e.15',4]],project:[['e.2',5],['e.12',4],['e.14',3]],review:[['l.9',5],['l.7',3]],assessment:[['l.9',4],['l.1',3]]};(typeBase[type]||[]).forEach(([c,p])=>add(c,p,'Поддерживает выбранный тип урока.','Таңдалған сабақ түрін қолдайды.'));
- const focusBase={inquiry:[['g.9',6],['l.8',4],['e.15',4]],functional:[['e.1',5],['g.4',4],['l.8',3]],collaboration:[['l.6',6],['e.14',5],['d.7',3]],digital:[['d.1',5],['d.2',5],['d.20',4]],sustain:[['g.1',5],['g.3',5],['e.5',4]],creativity:[['e.2',6],['d.20',4],['g.9',3]],balanced:[]};(focusBase[focus]||[]).forEach(([c,p])=>add(c,p,'Соответствует выбранному методическому акценту.','Таңдалған әдістемелік басымдыққа сәйкес.'));
- const rules=[
-  [/экспер|лаборат|исслед|опыт|измер|тәжіриб|зертхан|зертте|өлше/,[['g.9',6],['e.15',5],['l.8',3]],'В теме есть исследование, эксперимент или измерение.','Тақырыпта зерттеу, тәжірибе немесе өлшеу бар.'],
-  [/график|данн|таблиц|анализ|сравн|диаграм|дерек|талда|кесте|салыст/,[['g.4',5],['l.8',4],['d.2',2]],'Нужны анализ данных, сравнение или работа с графиками.','Деректерді талдау, салыстыру немесе графикпен жұмыс қажет.'],
-  [/задач|реш|расчет|вычис|есеп|шеш|есепте/,[['g.6',5],['l.8',4],['e.15',3]],'В формулировке есть решение задач или расчёт.','Тұжырымда есеп шығару немесе есептеу бар.'],
-  [/проект|модель|макет|прототип|жоба/,[['e.2',5],['e.12',4],['e.15',3]],'Предполагается создание проекта, модели или продукта.','Жоба, модель немесе өнім жасау көзделген.'],
-  [/команд|групп|парн|сотруд|топ|жұп|бірлес|ынтымақ/,[['l.6',6],['e.14',5],['d.7',2]],'Запланирована совместная работа.','Бірлескен жұмыс жоспарланған.'],
-  [/интернет|цифр|онлайн|симуля|phet|компьют|программ|код|сандық|цифрлық|бағдарлам/,[['d.1',4],['d.2',4],['d.20',4]],'Используются цифровые источники, симуляции или цифровой продукт.','Цифрлық дереккөздер, симуляциялар немесе цифрлық өнім қолданылады.'],
-  [/программ|код|алгоритм|бағдарлам|код/,[['d.13',6],['d.18',3]],'Есть программирование или алгоритмическая задача.','Бағдарламалау немесе алгоритмдік міндет бар.'],
-  [/эколог|устойчив|энергосбереж|природ|қоршаған|эколог|тұрақты|табиғат/,[['g.1',5],['g.3',5],['e.5',4]],'Есть экологический или устойчивый контекст.','Экологиялық немесе тұрақты даму контексті бар.'],
-  [/реальн|быт|жизн|практич|функцион|тариф|бюджет|өмір|тұрмыс|практик|функционал/,[['e.1',5],['g.4',3]],'Есть реальный/функциональный контекст применения.','Шынайы/функционалдық қолдану контексті бар.'],
-  [/презент|объясн|защит|доклад|түсіндір|қорғау|презентац/,[['l.5',5],['e.10',3]],'Нужно объяснять, представлять или защищать результат.','Нәтижені түсіндіру, ұсыну немесе қорғау қажет.'],
-  [/безопас|риск|қауіп|тәуекел/,[['e.13',4],['l.2',3]],'Нужно учитывать риск, безопасность или неопределённость.','Тәуекелді, қауіпсіздікті немесе белгісіздікті ескеру қажет.'],
-  [/рефлекс|самооцен|өзін-өзі|рефлек/,[['l.9',5],['l.7',3]],'Заявлена рефлексия или самооценивание.','Рефлексия немесе өзін-өзі бағалау көрсетілген.'],
-  [/источник|фейк|достовер|авторск|дереккөз|жалған|авторлық/,[['d.1',4],['d.2',6],['d.12',4]],'Нужно искать и критически оценивать источники.','Дереккөздерді іздеу және сыни бағалау қажет.'],
-  [/здоров|әл-ауқат|денсаулық/,[['l.3',5],['d.16',3]],'Есть контекст здоровья и благополучия.','Денсаулық пен әл-ауқат контексті бар.'],
-  [/будущ|прогноз|болашақ|болжам/,[['g.7',5],['e.3',4]],'Нужно прогнозировать или рассматривать будущее.','Болжау немесе болашақты қарастыру қажет.'],
-  [/инициатив|самостоятель|дербес|бастама/,[['g.12',4],['e.11',4]],'Акцент на самостоятельности и инициативе.','Дербестік пен бастамаға басымдық берілген.']
- ];
- rules.forEach(([re,list,ru,kz])=>{if(re.test(raw))list.forEach(([c,p])=>add(c,p,ru,kz))});
- const core=assistantPickCore(scores,4),cross=assistantTopCross(core);
- const methodScores={};const am=(i,p)=>methodScores[i]=(methodScores[i]||0)+p;({new:[[1,3],[3,1]],practice:[[3,3],[4,2]],lab:[[5,7],[3,2]],project:[[0,7],[3,3]],review:[[3,3],[4,3]],assessment:[[1,2]]}[type]||[]).forEach(([i,p])=>am(i,p));if(/экспер|лаборат|зертхан|тәжіриб/.test(raw))am(5,6);if(/проект|жоба|модель|прототип/.test(raw))am(0,6);if(/команд|групп|топ|жұп|бірлес/.test(raw))am(3,5);if(/игр|ойын/.test(raw))am(4,6);if(/сообществ|қауым/.test(raw))am(6,6);if(/ценност|құндылық/.test(raw))am(2,4);if(/ооп|особ|слаб|индивиду|жеке|әлсіз/.test(raw+ ' '+fieldVal('needs').toLowerCase()))am(1,5);if(core.some(c=>['e.2','e.12'].includes(c)))am(0,2);if(core.some(c=>['l.6','e.14'].includes(c)))am(3,2);const teaching=Object.keys(methodScores).map(Number).sort((a,b)=>methodScores[b]-methodScores[a]).slice(0,2);
- const assessScores={};const aa=(i,p)=>assessScores[i]=(assessScores[i]||0)+p;({new:[[6,5],[5,4]],practice:[[5,4],[1,3],[6,2]],lab:[[5,6],[2,5],[1,3]],project:[[3,6],[0,5],[2,4]],review:[[1,5],[6,5],[0,2]],assessment:[[2,6],[6,3]]}[type]||[]).forEach(([i,p])=>aa(i,p));if(/цифр|онлайн|тест|сандық|цифрлық/.test(raw))aa(4,4);if(/команд|групп|топ|жұп|бірлес/.test(raw))aa(0,4);const assessment=Object.keys(assessScores).map(Number).sort((a,b)=>assessScores[b]-assessScores[a]).slice(0,3);
- const templ=assistantTemplates(subject,type,fieldVal('topic')),ideas=assistantContextIdeas(subject,fieldVal('topic'));
- const result={stamp:Date.now(),subject,type,focus,core,cross,teaching,assessment,reasons,outcome:templ[0],evidence:templ[1],indicator:templ[2],realLife:ideas[0],resources:ideas[1],timeline:assistantTimeline(type,Number(fieldVal('duration')||45))};state.assistantResult=result;renderAssistantResult();pushHistoryNow();toast(tr('assistantGenerated'))
-}
-function renderAssistantResult(){const root=document.getElementById('assistantResult');if(!root)return;const r=state.assistantResult;if(r){const tt=assistantTemplates(r.subject||state.assistantSubject,r.type||state.assistantLessonType,fieldVal('topic')),ii=assistantContextIdeas(r.subject||state.assistantSubject,fieldVal('topic'));r.outcome=tt[0];r.evidence=tt[1];r.indicator=tt[2];r.realLife=ii[0];r.resources=ii[1];r.timeline=assistantTimeline(r.type||state.assistantLessonType,Number(fieldVal('duration')||45));}['assistantApplyAllBtn','assistantApplyCompBtn','assistantApplyTimelineBtn'].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=!r});if(!r){root.innerHTML=`<div class="assistant-empty">${escapeHtml(tr('assistantEmpty'))}</div>`;return}const compHtml=r.core.map(c=>{const x=findComp(c);return `<div class="assistant-item"><b>${c} · ${escapeHtml(txt(x))}</b><div class="why">${escapeHtml(assistantReason(c,r.reasons||{}))}</div></div>`}).join('');const crossHtml=r.cross.map(c=>{const x=findComp(c);return `<span class="assistant-pill cross">${c} · ${escapeHtml(txt(x))}</span>`}).join('');const meth=r.teaching.map(i=>`<span class="assistant-pill">${escapeHtml(txt(teachingMethods[i]))}</span>`).join('');const assess=r.assessment.map(i=>`<span class="assistant-pill">${escapeHtml(txt(assessmentMethods[i]))}</span>`).join('');const tl=(r.timeline||[]).map((x,i)=>`<tr><td>${i+1}</td><td>${x.min}</td><td>${escapeHtml(x.activity)}</td><td>${escapeHtml(x.evidence)}</td><td>${x.support}%</td></tr>`).join('');root.innerHTML=`<div class="assistant-mini">${tr('assistantCurrentInput')}: ${escapeHtml(assistantOptLabel('subjects',r.subject))} · ${escapeHtml(assistantOptLabel('types',r.type))} · ${escapeHtml(assistantOptLabel('focuses',r.focus))}</div><div class="assistant-grid"><div class="assistant-block"><h4>${tr('assistantCore')}</h4>${compHtml}</div><div class="assistant-block"><h4>${tr('assistantCross')}</h4><div class="assistant-pills">${crossHtml}</div><h4 style="margin-top:12px">${tr('assistantMethods')}</h4><div class="assistant-pills">${meth}</div><h4 style="margin-top:12px">${tr('assistantAssessment')}</h4><div class="assistant-pills">${assess}</div></div><div class="assistant-block wide"><h4>${tr('assistantResultTitle')}</h4><div class="assistant-previewline"><b>${tr('assistantOutcome')}:</b> ${escapeHtml(r.outcome)}</div><div class="assistant-previewline"><b>${tr('assistantEvidence')}:</b> ${escapeHtml(r.evidence)}</div><div class="assistant-previewline"><b>${tr('assistantCriteria')}:</b> ${escapeHtml(r.indicator)}</div><div class="assistant-previewline"><b>${tr('assistantLife')}:</b> ${escapeHtml(r.realLife)}</div><div class="assistant-previewline"><b>${tr('assistantResources')}:</b> ${escapeHtml(r.resources)}</div></div><div class="assistant-block wide"><h4>${tr('assistantTimeline')}</h4><div style="overflow:auto"><table class="assistant-timeline"><thead><tr><th>№</th><th>${tr('minutes')}</th><th>${tr('timelineActivity')}</th><th>${tr('assessmentEvidence')}</th><th>${tr('support')}</th></tr></thead><tbody>${tl}</tbody></table></div></div></div>`}
-function assistantAddCompetencies(){const r=state.assistantResult;if(!r)return;pushHistoryNow();[...(r.core||[]),...(r.cross||[])].forEach(c=>{if(!state.selectedCompetencies.includes(c))state.selectedCompetencies.push(c);const d=ensureDiag(c);if(d.diagnostic==='')d.diagnostic=String((r.assessment||[])[0]??6)});renderSteps();renderPanes();afterChange();toast(tr('assistantCompApplied'))}
-function applySmartAssistant(all=true){const r=state.assistantResult;if(!r)return;pushHistoryNow();[...(r.core||[]),...(r.cross||[])].forEach(c=>{if(!state.selectedCompetencies.includes(c))state.selectedCompetencies.push(c);const d=ensureDiag(c);if(d.diagnostic==='')d.diagnostic=String((r.assessment||[])[0]??6)});r.teaching.forEach(i=>{if(!state.selectedTeaching.includes(i))state.selectedTeaching.push(i)});r.assessment.forEach(i=>{if(!state.selectedAssessment.includes(i))state.selectedAssessment.push(i)});if(!state.outcome.trim())state.outcome=r.outcome;if(!state.evidence.trim())state.evidence=r.evidence;if(!state.indicator.trim())state.indicator=r.indicator;if(!fieldVal('realLife')){document.getElementById('realLife').value=r.realLife;state.realLife=r.realLife}if(!fieldVal('baseResources')){document.getElementById('baseResources').value=r.resources;state.baseResources=r.resources}state.timeline=(r.timeline||[]).map(x=>({...x}));renderSteps();renderPanes();afterChange();toast(tr('assistantApplied'))}
-function applyAssistantTimeline(){const r=state.assistantResult;if(!r)return;pushHistoryNow();state.timeline=(r.timeline||[]).map(x=>({...x}));state.step=7;renderSteps();renderPanes();afterChange();toast(tr('assistantTimelineApplied'))}
-
-function updateGuideLanguage(){
- document.querySelectorAll('[data-guide-lang]').forEach(el=>{el.hidden=(el.dataset.guideLang!==state.lang)});
- const close=document.getElementById('guideCloseBtn');if(close)close.setAttribute('aria-label',state.lang==='kz'?'Жабу':'Закрыть');
-}
-function openGuide(){const o=document.getElementById('guideOverlay');if(!o)return;updateGuideLanguage();o.classList.add('open');o.setAttribute('aria-hidden','false');document.body.classList.add('guide-open');const b=document.getElementById('guideBody');if(b)b.scrollTop=0;setTimeout(()=>document.getElementById('guideCloseBtn')?.focus(),20)}
-function closeGuide(){const o=document.getElementById('guideOverlay');if(!o)return;o.classList.remove('open');o.setAttribute('aria-hidden','true');document.body.classList.remove('guide-open');document.getElementById('guideBtn')?.focus()}
-
-function afterChange(rerenderSteps=true,debounced=false){ids.forEach(id=>state[id]=document.getElementById(id)?.value??state[id]);if(rerenderSteps)renderSteps();renderChecklist();renderQuality();renderPreview();if(!restoringHistory){if(debounced)scheduleHistory();else pushHistoryNow()}}
-function applyLang(){document.documentElement.lang=state.lang;document.querySelectorAll('[data-i]').forEach(el=>el.textContent=tr(el.dataset.i));document.querySelectorAll('[data-ph]').forEach(el=>el.placeholder=tr(el.dataset.ph));updateGuideLanguage();document.getElementById('ruBtn').classList.toggle('active',state.lang==='ru');document.getElementById('kzBtn').classList.toggle('active',state.lang==='kz');renderAssistantSelects();renderAssistantResult();renderSteps();renderPanes();renderChecklist();renderQuality();renderPreview()}
-function autoDraft(){
- const dur=Number(document.getElementById('duration').value||45);let base=(state.lang==='kz'?defaultTimelineKz:defaultTimelineRu).map(x=>({...x}));const baseSum=base.reduce((a,b)=>a+b.min,0);const factor=dur/baseSum;let used=0;base=base.map((x,i)=>{if(i===base.length-1){x.min=Math.max(1,dur-used)}else{x.min=Math.max(2,Math.round(x.min*factor));used+=x.min}return x});
- const goal=(fieldVal('goal')+' '+fieldVal('topic')).toLowerCase();
- if(/экспер|лаборат|зертхан|тәжіриб/.test(goal)){base[2].activity+=(state.lang==='ru'?' Провести безопасную пробу/эксперимент с пошаговой картой.':' Қадамдық карта бойынша қауіпсіз тәжірибе жүргізу.');if(!state.selectedTeaching.includes(5))state.selectedTeaching.push(5);}
- if(/проект|жоба|проблем|мәселе/.test(goal)&&!state.selectedTeaching.includes(0))state.selectedTeaching.push(0);
- if(/групп|команд|топ|бірлес/.test(goal)&&!state.selectedTeaching.includes(3))state.selectedTeaching.push(3);
- state.timeline=base;state.step=7;renderSteps();renderPanes();afterChange();}
-
-// --- Offline Word (.docx) export ---
-function wordXmlEscape(s=''){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;')}
-function wordSafeText(s=''){s=String(s??'').trim();return s||'—'}
-function wordRun(text,bold=false,size=22){return `<w:r><w:rPr>${bold?'<w:b/>':''}<w:sz w:val="${size}"/><w:szCs w:val="${size}"/></w:rPr><w:t xml:space="preserve">${wordXmlEscape(text)}</w:t></w:r>`}
-function wordPara(text,opts={}){const {bold=false,size=22,after=90,before=0,align='left'}=opts;return `<w:p><w:pPr><w:spacing w:before="${before}" w:after="${after}"/><w:jc w:val="${align}"/></w:pPr>${wordRun(text,bold,size)}</w:p>`}
-function wordMixedPara(label,value){return `<w:p><w:pPr><w:spacing w:after="70"/></w:pPr>${wordRun(label+': ',true,22)}${wordRun(wordSafeText(value),false,22)}</w:p>`}
-function wordHeading(text,level=1){return wordPara(text,{bold:true,size:level===1?30:25,before:level===1?170:120,after:100})}
-function wordCell(text,header=false,width=0){const shd=header?'<w:shd w:fill="DCE6F1"/>':'';const w=width?`<w:tcW w:w="${width}" w:type="dxa"/>`:'';return `<w:tc><w:tcPr>${w}<w:vAlign w:val="center"/>${shd}<w:tcMar><w:top w:w="70" w:type="dxa"/><w:left w:w="80" w:type="dxa"/><w:bottom w:w="70" w:type="dxa"/><w:right w:w="80" w:type="dxa"/></w:tcMar></w:tcPr>${wordPara(wordSafeText(text),{bold:header,size:19,after:0})}</w:tc>`}
-function wordTable(headers,rows,widths=[]){const borders='<w:tblBorders><w:top w:val="single" w:sz="4" w:color="AAB8C5"/><w:left w:val="single" w:sz="4" w:color="AAB8C5"/><w:bottom w:val="single" w:sz="4" w:color="AAB8C5"/><w:right w:val="single" w:sz="4" w:color="AAB8C5"/><w:insideH w:val="single" w:sz="4" w:color="C6D0DA"/><w:insideV w:val="single" w:sz="4" w:color="C6D0DA"/></w:tblBorders>';
- const grid=widths.length?`<w:tblGrid>${widths.map(w=>`<w:gridCol w:w="${w}"/>`).join('')}</w:tblGrid>`:'';
- const head=`<w:tr>${headers.map((h,i)=>wordCell(h,true,widths[i]||0)).join('')}</w:tr>`;
- const body=rows.map(r=>`<w:tr>${r.map((v,i)=>wordCell(v,false,widths[i]||0)).join('')}</w:tr>`).join('');
- return `<w:tbl><w:tblPr><w:tblW w:w="0" w:type="auto"/><w:tblLayout w:type="fixed"/>${borders}</w:tblPr>${grid}${head}${body}</w:tbl>${wordPara('',{after:35})}`;
-}
-function wordCompetencyLabel(code){const x=findComp(code);return x?`${code} · ${txt(x)}`:code}
-function wordSelectedNames(indices,items){return (indices||[]).map(i=>items[i]?txt(items[i]):'').filter(Boolean).join('; ')}
-function buildWordDocumentXml(){
- syncBaseFields();ensureState();
- const body=[];
- body.push(wordPara(tr('planTitle'),{bold:true,size:34,align:'center',after:180}));
- body.push(wordMixedPara(tr('assistantSubjectWord'),assistantOptLabel('subjects',state.assistantSubject)));
- body.push(wordMixedPara(tr('topic'),fieldVal('topic')));
- body.push(wordMixedPara(tr('duration'),`${fieldVal('duration')} ${tr('minutes')}`));
- body.push(wordMixedPara(tr('goal'),fieldVal('goal')));
- body.push(wordHeading(tr('taskFrame'),2));
- body.push(wordMixedPara(tr('needs'),fieldVal('needs')));
- body.push(wordMixedPara(tr('audience'),fieldVal('audience')));
- body.push(wordMixedPara(tr('place'),fieldVal('place')));
- body.push(wordMixedPara(tr('realLife'),fieldVal('realLife')));
- body.push(wordHeading(`1. ${tr('competencies')}`,2));
- const comps=(state.selectedCompetencies||[]).map(wordCompetencyLabel);
- body.push(wordPara(comps.length?comps.join('\n'):'—',{size:21,after:100}));
- body.push(wordHeading(`2. ${tr('initialAssessment')}`,2));
- const diagRows=(state.selectedCompetencies||[]).map(code=>{const d=ensureDiag(code);return [wordCompetencyLabel(code),d.level?tr('level'+d.level):'—',d.diagnostic!==''&&assessmentMethods[+d.diagnostic]?txt(assessmentMethods[+d.diagnostic]):'—',d.note||'—']});
- if(diagRows.length)body.push(wordTable([tr('competencies'),tr('initialLevel'),tr('diagnosticMethod'),tr('baselineNote')],diagRows,[3000,1700,2400,2400]));else body.push(wordPara('—'));
- body.push(wordHeading(`3. ${tr('teachingMethods')}`,2));
- body.push(wordPara(wordSelectedNames(state.selectedTeaching,teachingMethods)||'—',{size:21}));
- body.push(wordHeading(`4. ${tr('expected')}`,2));
- body.push(wordMixedPara(tr('outcome'),state.outcome));
- body.push(wordMixedPara(tr('evidenceProduct'),state.evidence));
- body.push(wordMixedPara(tr('indicator'),state.indicator));
- body.push(wordHeading(`5. ${tr('assessment')}`,2));
- body.push(wordPara(wordSelectedNames(state.selectedAssessment,assessmentMethods)||'—',{size:21}));
- body.push(wordHeading(`6. ${tr('resources')}`,2));
- body.push(wordMixedPara(tr('resources'),[fieldVal('baseResources'),state.resources].filter(Boolean).join('; ')));
- body.push(wordMixedPara(tr('people'),state.people));
- body.push(wordHeading(`7. ${tr('chronology')}`,2));
- const timelineRows=(state.timeline||[]).map((r,i)=>[String(i+1),String(r.min??''),r.activity||'—',r.evidence||'—',`${r.support??0}%`]);
- if(timelineRows.length)body.push(wordTable(['№',tr('minutes'),tr('timelineActivity'),tr('assessmentEvidence'),tr('support')],timelineRows,[450,650,4300,2700,900]));else body.push(wordPara('—'));
- body.push(wordHeading(tr('qualityTitle'),2));
- const q=qualityChecks(),score=q.filter(x=>x[0]).length;
- body.push(wordPara(`${score} / 7 ${tr('reflected')}`,{bold:true,size:22}));
- q.forEach(([ok,title,why])=>body.push(wordPara(`${ok?'✓':'○'} ${title}${ok?'':` — ${why}`}`,{size:20,after:55})));
- body.push(wordPara(state.lang==='ru'?'Примечание: автоматическая проверка служит подсказкой для планирования и не является оценкой качества урока.':'Ескерту: автоматты тексеру жоспарлауға арналған кеңес, сабақ сапасының бағасы емес.',{size:18,after:80}));
- return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:xml="http://www.w3.org/XML/1998/namespace"><w:body>${body.join('')}<w:sectPr><w:pgSz w:w="11906" w:h="16838"/><w:pgMar w:top="1134" w:right="850" w:bottom="1134" w:left="850" w:header="708" w:footer="708" w:gutter="0"/></w:sectPr></w:body></w:document>`;
-}
-function crc32(bytes){if(!crc32.table){crc32.table=Array.from({length:256},(_,n)=>{let c=n;for(let k=0;k<8;k++)c=(c&1)?(0xEDB88320^(c>>>1)):(c>>>1);return c>>>0})}let c=0xFFFFFFFF;for(const b of bytes)c=crc32.table[(c^b)&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0}
-function u16(n){return [n&255,(n>>>8)&255]}
-function u32(n){return [n&255,(n>>>8)&255,(n>>>16)&255,(n>>>24)&255]}
-function concatBytes(parts){let len=0;parts.forEach(p=>len+=p.length);const out=new Uint8Array(len);let off=0;parts.forEach(p=>{out.set(p,off);off+=p.length});return out}
-function makeZip(files){const enc=new TextEncoder(),locals=[],centrals=[];let offset=0;for(const f of files){const name=enc.encode(f.name),data=typeof f.data==='string'?enc.encode(f.data):f.data,crc=crc32(data),flags=0x0800;const local=new Uint8Array([...u32(0x04034b50),...u16(20),...u16(flags),...u16(0),...u16(0),...u16(0),...u32(crc),...u32(data.length),...u32(data.length),...u16(name.length),...u16(0),...name]);locals.push(local,data);const central=new Uint8Array([...u32(0x02014b50),...u16(20),...u16(20),...u16(flags),...u16(0),...u16(0),...u16(0),...u32(crc),...u32(data.length),...u32(data.length),...u16(name.length),...u16(0),...u16(0),...u16(0),...u16(0),...u32(0),...u32(offset),...name]);centrals.push(central);offset+=local.length+data.length}const centralStart=offset,centralData=concatBytes(centrals),localData=concatBytes(locals);const end=new Uint8Array([...u32(0x06054b50),...u16(0),...u16(0),...u16(files.length),...u16(files.length),...u32(centralData.length),...u32(centralStart),...u16(0)]);return concatBytes([localData,centralData,end])}
-function buildDocxBytes(){const contentTypes=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml"/></Types>`;const rels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;const docRels=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>`;const styles=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><w:styles xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:docDefaults><w:rPrDefault><w:rPr><w:rFonts w:ascii="Arial" w:hAnsi="Arial" w:cs="Arial"/><w:lang w:val="ru-RU" w:eastAsia="ru-RU" w:bidi="ru-RU"/></w:rPr></w:rPrDefault><w:pPrDefault><w:pPr><w:spacing w:after="80" w:line="240" w:lineRule="auto"/></w:pPr></w:pPrDefault></w:docDefaults><w:style w:type="paragraph" w:default="1" w:styleId="Normal"><w:name w:val="Normal"/></w:style></w:styles>`;return makeZip([{name:'[Content_Types].xml',data:contentTypes},{name:'_rels/.rels',data:rels},{name:'word/document.xml',data:buildWordDocumentXml()},{name:'word/styles.xml',data:styles},{name:'word/_rels/document.xml.rels',data:docRels}])}
-function exportWordDocx(){try{const bytes=buildDocxBytes(),blob=new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'}),a=document.createElement('a'),safe=fieldVal('topic').replace(/[^a-zA-Zа-яА-ЯёЁәіңғүұқөһӘІҢҒҮҰҚӨҺ0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,55)||'lesson';a.href=URL.createObjectURL(blob);a.download=`SCAFFOLD_${safe}.docx`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1200);toast(tr('wordCreated'))}catch(e){console.error(e);alert(state.lang==='ru'?'Не удалось создать документ Word.':'Word құжатын жасау мүмкін болмады.')}}
-
-function exportPlan(){ids.forEach(id=>state[id]=document.getElementById(id).value);const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`SCAFFOLD_${fieldVal('topic').replace(/[^a-zA-Zа-яА-ЯёЁәіңғүұқөһӘІҢҒҮҰҚӨҺ0-9]+/g,'_').slice(0,45)||'lesson'}.json`;a.click();URL.revokeObjectURL(a.href);toast(tr('exported'))}
-function importPlan(file){pushHistoryNow();const r=new FileReader();r.onload=()=>{try{const obj=JSON.parse(r.result);Object.assign(state,obj);ensureState();ids.forEach(id=>{document.getElementById(id).value=state[id]??''});applyLang();pushHistoryNow();toast(tr('imported'))}catch(e){alert('JSON error')}};r.readAsText(file)}
-function planText(){const tmp=document.getElementById('planPreview');return tmp.innerText}
-
-ids.forEach(id=>document.getElementById(id).addEventListener('input',()=>afterChange(false,true)));
-document.getElementById('smartJumpBtn').onclick=()=>document.getElementById('smartAssistantCard').scrollIntoView({behavior:'smooth',block:'start'});
-document.getElementById('guideBtn').onclick=openGuide;document.getElementById('guideCloseBtn').onclick=closeGuide;document.getElementById('guideOverlay').onclick=e=>{if(e.target.id==='guideOverlay')closeGuide()};
-document.getElementById('assistantAnalyzeBtn').onclick=runSmartAssistant;
-document.getElementById('assistantApplyAllBtn').onclick=()=>applySmartAssistant(true);
-document.getElementById('assistantApplyCompBtn').onclick=assistantAddCompetencies;
-document.getElementById('assistantApplyTimelineBtn').onclick=applyAssistantTimeline;
-document.getElementById('ruBtn').onclick=()=>{pushHistoryNow();state.lang='ru';applyLang();pushHistoryNow()};document.getElementById('kzBtn').onclick=()=>{pushHistoryNow();state.lang='kz';applyLang();pushHistoryNow()};document.getElementById('undoBtn').onclick=undoChange;document.getElementById('redoBtn').onclick=redoChange;document.getElementById('saveBtn').onclick=save;document.getElementById('printBtn').onclick=()=>window.print();document.getElementById('exportBtn').onclick=exportPlan;document.getElementById('wordBtn').onclick=exportWordDocx;document.getElementById('importBtn').onclick=()=>document.getElementById('fileInput').click();document.getElementById('fileInput').onchange=e=>{if(e.target.files[0])importPlan(e.target.files[0])};document.getElementById('copyBtn').onclick=async()=>{try{await navigator.clipboard.writeText(planText());toast(tr('copied'))}catch(e){const ta=document.createElement('textarea');ta.value=planText();document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();toast(tr('copied'))}};document.getElementById('autoBtn').onclick=autoDraft;
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&document.getElementById('guideOverlay')?.classList.contains('open')){e.preventDefault();closeGuide()}});
-document.addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase(),el=document.activeElement,editing=el&&(['INPUT','TEXTAREA','SELECT'].includes(el.tagName)||el.isContentEditable);if((e.ctrlKey||e.metaKey)&&k==='z'&&!editing){e.preventDefault();e.shiftKey?redoChange():undoChange()}else if((e.ctrlKey||e.metaKey)&&k==='y'&&!editing){e.preventDefault();redoChange()}});
-load();applyLang();afterChange();updateHistoryButtons();
-</script>
+        // Initialize on load
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('ui-constantsBody').innerHTML = ''; // Clear template
+            setLang('ru');
+            generateNewTask(); // Добавлена генерация первой задачи при старте
+        });
+    </script>
 </body>
 </html>
